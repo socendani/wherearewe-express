@@ -1,0 +1,20 @@
+/**
+ * MUI Colors module
+ */
+body {
+  background-color: #F3E5F5; }
+
+/* DMR-START: Para el STICKY FOOTER !!! */
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column; }
+
+#main {
+  flex: 1 0 auto; }
+
+/* DMR-END: Para el STICKY FOOTER !!! */
+/*********** ..dddMAP *************/
+#map {
+  min-height: 80vh;
+  width: 100%; }

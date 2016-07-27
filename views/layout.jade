@@ -1,0 +1,41 @@
+doctype html
+html(lang="en")
+  head
+    title= title
+
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='description', content='')
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+    // if lt IE 9
+      script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
+
+  block css
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet', href='/bower_components/mui/packages/cdn/css/mui.min.css')
+    link(rel='stylesheet', href='/stylesheets/project.css')
+
+ block top-scripts
+    script(src='//maps.googleapis.com/maps/api/js?key=&callback=initMap', asyn, defer)
+    script(src='/bower_components/jquery/dist/jquery.min.js')
+    script(src='/bower_components/mui/packages/cdn/js/mui.min.js')
+
+  body(onload="init()")
+    include sidenav.jade
+
+    header#header
+      include top.jade
+
+    main#main
+          block content
+
+    footer#footer
+      .mui-container-fluid
+        include footer.jade
+script
+  include ../public/javascripts/layout.js
+  include ../public/javascripts/init.js
+
+     

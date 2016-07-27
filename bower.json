@@ -1,0 +1,21 @@
+{
+  "name": "wherearewe-express",
+  "description": "Where Are We WebSite for map-chat friends around",
+  "main": "",
+  "authors": [
+    "Dani Morte <socendani@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mui": "^0.6.8",
+    "jquery": "^3.1.0"
+  }
+}

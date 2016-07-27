@@ -1,0 +1,25 @@
+@import "bower_components/mui/src/sass/mui/colors";
+body {
+  background-color: mui-color('purple', '50');
+}
+
+/* DMR-START: Para el STICKY FOOTER !!! */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+ #main {
+    flex: 1 0 auto;
+  }
+/* DMR-END: Para el STICKY FOOTER !!! */
+
+/*********** ..dddMAP *************/
+#map {
+  min-height:80vh;
+  // height:100%;
+  width:100%
+}
+
+

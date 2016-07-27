@@ -1,0 +1,25 @@
+/*https://code.visualstudio.com/docs/languages/css*/
+{
+    "version": "0.1.0",
+    "command": "gulp",
+    "isShellCommand": true,
+    "tasks": [
+        {
+            "taskName": "default",
+            "isBuildCommand": true,
+            "showOutput": "always",
+            "isWatching": true
+        }
+    ]
+}
+
+
+
+
+// Sass configuration
+// {
+//     "version": "0.1.0",
+//     "command": "node-sass",
+//     "isShellCommand": true,
+//     "args": ["public/scss/project.scss", "public/stylesheets/project.css"]
+// }
