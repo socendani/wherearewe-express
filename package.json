@@ -3,9 +3,6 @@
   "description": "Where Are We WebSite for map-chat friends around",
   "version": "0.0.1",
   "private": true,
-  // "scripts": {
-  //   "start": "nodemon ./bin/www"
-  // },
   "dependencies": {
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
