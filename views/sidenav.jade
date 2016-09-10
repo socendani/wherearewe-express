@@ -1,17 +1,24 @@
 #sidedrawer.mui--no-user-select
-  #sidedrawer-brand.mui--appbar-line-height.mui--text-title TEXTO
+  #sidedrawer-brand.mui--appbar-line-height.mui--text-title TEXTO1
   .mui-divider
   .row-fluid
-    .container
-      p nickname
-      input(type="text",name="nickname",placeholder="#{nickname}")
+    .container(style='margin:10px')
 
-      br 
+        form(name="form_entrada", method="post", action="login")
+          p nickname
+          input(type="text",name="nickname",placeholder="#{nickname}")
 
-      p Room ID
-      input(type="text",name="room",placeholder="#{roomid}")
+          br 
 
-      br
+          p Room ID
+          input(type="text",name="roomid",placeholder="#{roomid}")
+
+          br
+          input(type="submit", value="#{fraseboton}")
+
+          br
+      if nickname 
+        a(href="/logout") Logout
 
       p Chat
       tetarea(name="chat")

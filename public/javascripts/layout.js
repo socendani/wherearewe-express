@@ -1,12 +1,12 @@
-jQuery(function($) {
+jQuery(function ($) {
   var $bodyEl = $('body'),
-      $sidedrawerEl = $('#sidedrawer');
+    $sidedrawerEl = $('#sidedrawer');
 
 
   function showSidedrawer() {
     // show overlay
     var options = {
-      onclose: function() {
+      onclose: function () {
         $sidedrawerEl
           .removeClass('active')
           .appendTo(document.body);
@@ -17,7 +17,7 @@ jQuery(function($) {
 
     // show element
     $sidedrawerEl.appendTo($overlayEl);
-    setTimeout(function() {
+    setTimeout(function () {
       $sidedrawerEl.addClass('active');
     }, 20);
   }
@@ -30,15 +30,15 @@ jQuery(function($) {
 
   $('.js-show-sidedrawer').on('click', showSidedrawer);
   $('.js-hide-sidedrawer').on('click', hideSidedrawer);
-});
 
+  var $titleEls = $('strong', $sidedrawerEl);
 
-var $titleEls = $('strong', $sidedrawerEl);
+  $titleEls
+    .next()
+    .hide();
 
-$titleEls
-  .next()
-  .hide();
+  $titleEls.on('click', function () {
+    $(this).next().slideToggle(200);
+  });
 
-$titleEls.on('click', function() {
-  $(this).next().slideToggle(200);
 });

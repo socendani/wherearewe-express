@@ -4,12 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var sessions = require('express-session');
 var cors = require("cors");
-
 var routes = require('./routes/index');
 
 
+//Servidor
 var app = express();
+var server = require("http").Server(app);  //for websocket
+var io = require("socket.io")(server); //for websocket
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,7 +30,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(cors());
 
+//Cookies: //http://expressjs.com/es/advanced/best-practice-security.html
+app.disable('x-powered-by');
+var expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+app.use(sessions({
+  secret: "PROBANDOLASSESIONES",
+  resave: true,
+  saveUninitialized: true,
+  name: 'session',
+  keys: ['key1', 'key2'],
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    // domain: 'example.com',
+    // path: 'foo/bar',
+    expires: expiryDate
+  }
+
+}));
+
+
+//Revisar si es necesario esto:
 app.use('/', routes);
+
+//Situación
+var dmr_servidor = "http://localhost:3000";
+
 
 
 
@@ -60,5 +90,13 @@ app.use(function (err, req, res, next) {
   });
 });
 
+//TEST SOCKETS.io
+// io.sockets.on("connection", function (socket) {
+//   socket.on("hello", function (message) {
+//     console.log("Mensaje servidor: " + message);
+//   });
+// });
 
-module.exports = app;
+
+// module.exports = app;
+module.exports = { app: app, server: server };

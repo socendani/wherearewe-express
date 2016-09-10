@@ -1,17 +1,34 @@
 /***
  * 
  * 
+ * DANI::: usar watchPosition en vez de geoposition
+ * https://developer.mozilla.org/es/docs/WebAPI/Using_geolocation
  * 
  */
 
+var dmr_servidor = "http://localhost:3000";
+var map;
+lat = "KKKK";
+
+// function init() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(initMap, initShowError); //(success, error, options)
+//   } else {
+//     alert("Este navegador no soporta geolocalizacion.");
+//   }
+// }
+
 function init() {
+  var options = null;
+  var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(initMap, initShowError);
-  } else {
-    alert("Este navegador no soporta geolocalizacion.");
+    if (isChrome) //set this var looking for Chrome un user-agent header
+      options = { enableHighAccuracy: false, maximumAge: 15000, timeout: 30000 };
+    else
+      options = { maximumAge: Infinity, timeout: 0 };
+    navigator.geolocation.getCurrentPosition(initMap, initShowError, options);
   }
 }
-
 
 
 
@@ -42,17 +59,26 @@ function initShowError(error) {
  * 
  */
 
-var map;
-function initMap() {
+
+
+function initMapXXX() {
+  return false;
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 45.397, lng: 2.9},
+    center: { lat: 45.397, lng: 2.9 },
     zoom: 8
   });
 }
 
 
 
-function initMapXXX(position) {
+function initMap(position) {
+  var crd = position.coords;
+
+  console.log('Your current position is:');
+  console.log('Latitude : ' + crd.latitude);
+  console.log('Longitude: ' + crd.longitude);
+  console.log('More or less ' + crd.accuracy + ' meters.');
+
   lon = position.coords.longitude;
   lat = position.coords.latitude;
   var myCenter = new google.maps.LatLng(lat, lon);
@@ -60,8 +86,8 @@ function initMapXXX(position) {
 
   var mapOptions = {
     center: myCenter,
-    zoom: 10,
-    mapTypeId: google.maps.MapTypeId.HYBRID
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.roadmap
   };
 
 
