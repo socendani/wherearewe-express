@@ -22,4 +22,16 @@ body {
   width:100%
 }
 
+#messages {
+  div {
+    font-size: 80%;
+  }
+  .chat-user {
+    color: green;
+  }
+  .chat-user-me {
+    color: red;
+  }
+}
+
 

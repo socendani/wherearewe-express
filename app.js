@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var sessions = require('express-session');
 var cors = require("cors");
 var routes = require('./routes/index');
+var morgan  = require('morgan');
 
 
 //Servidor
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(cors());
+app.use(morgan('combined'))
 
 //Cookies: //http://expressjs.com/es/advanced/best-practice-security.html
 app.disable('x-powered-by');
@@ -105,18 +107,25 @@ var messages = [];
 
 io.on('connection', function (socket) {
 
-  socket.on('new_user', function (roomid) {
-    console.log('Alguien se ha conectado con Sockets a: ' + roomid);
+  socket.on('new-user', function (data) {
+    roomid = data.roomid;
+    nickname = data.nickname;
+    console.log(nickname + ', se ha conectado con Sockets a la Room ' + roomid);
     //joined
     socket.join(roomid);  //join al ROOMID
-    //Welcome..
-    messages = [{
-      roomid: roomid,
-      text: "..entrando en " + roomid,
-      nickname: "system"
-    }];
-    console.log("roomid==>" + roomid);
-    socket.in(roomid).emit('messages', messages);
+
+    var User = require("./models/users.js").User;
+    User.add(data);
+    //Welcome..NO NEED
+    // messages = [{
+    //   roomid: roomid,
+    //   text: "..entrando en " + roomid,
+    //   nickname: ""
+    // }];
+    // socket.in(roomid).emit('messages', messages);
+
+    //Recogemos los mensages anteriores?
+
   });
 
 
@@ -126,20 +135,29 @@ io.on('connection', function (socket) {
   //Nou missatge
   socket.on('new-message', function (data) {
     console.log(data);
-    roomid=data.roomid;
+    roomid = data.roomid;
     messages.push(data);
     // io.sockets.emit('messages', messages);
     io.sockets.in(roomid).emit('messages', messages);
   });
+
+  //Rebem la nova posició del usuaris d'un usuari i actualitzem 
+  //la posició de la resta d'usuaris
+  socket.on('update-position', function (data) {
+    roomid = data.roomid;
+
+    var User = require("./models/users.js").User;
+    User.update(data);
+    // var Room = require("./models/rooms.js").Room;
+    // var usuarios = Room.dameUsuarios();
+    var usuarios = User.dameUsuarios(roomid);
+    // console.log("usuarios=========================");
+    // console.log(usuarios);
+    io.sockets.in(roomid).emit('usuarios', usuarios);
+  });
+
+
+
 });
 
-
-// io.sockets.on("connection", function (socket) {
-//   socket.on("hello", function (message) {
-//     console.log("Mensaje servidor: " + message);
-//   });
-// });
-
-
-// module.exports = app;
 module.exports = { app: app, server: server };

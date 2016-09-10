@@ -4,20 +4,21 @@ var Room = {};
 
 
 Room.dameUsuarios = function () {
+  var factor=Math.random() ;
   return [
     {
       "_id": "11111",
-      "name": "usuario1",
+      "name": "juan",
       "color": "red",
-      "lat": 41.46,
-      "long": 2.233
+      "lat": 41.459+ factor,
+      "long": 2.242+ factor
     },
     {
       "_id": "22222",
-      "name": "usuario3",
+      "name": "pedro",
       "color": "green",
-      "lat": 41.416,
-      "long": 2.2233
+      "lat": 41.458+ factor,
+      "long": 2.243+ factor
     }
   ]
 }

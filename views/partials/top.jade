@@ -3,5 +3,9 @@
     a.sidedrawer-toggle.mui--visible-xs-inline-block.mui--visible-sm-inline-block.js-show-sidedrawer(href="#") ☰1
     a.sidedrawer-toggle.mui--hidden-xs.mui--hidden-sm.js-hide-sidedrawer(href="#") ☰2
     span.mui--text-title  nick: <b>#{nickname}</b>.  roomid: <b>#{roomid}</b>.My position: <b>#{lat}, #{long}</b>
-    input(type="hidden",id="roomid", value="#{roomid}")
+    div(style="color:black")
+      input(type="hidden",id="roomid", value="#{roomid}")
+      input(type="hidden",id="nickname", value="#{nickname}")
+      input(type="hidden",id="lat", value="#{lat}")
+      input(type="hidden",id="long", value="#{long}")
       

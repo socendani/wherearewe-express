@@ -18,3 +18,12 @@ body {
 #map {
   min-height: 80vh;
   width: 100%; }
+
+#messages div {
+  font-size: 80%; }
+
+#messages .chat-user {
+  color: green; }
+
+#messages .chat-user-me {
+  color: red; }

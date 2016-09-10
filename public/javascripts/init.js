@@ -6,17 +6,17 @@
  * 
  */
 
-var dmr_servidor = "http://localhost:3000";
-var map;
-lat = "KKKK";
+$(document).ready(function () {
+  setInterval('emitimosPosicion()', 5000);
+  // $("#lat").change(function () {
+  //   emitimosPosicion();
+  // });
+  // $("#long").change(function () {
+  //   emitimosPosicion();
+  // });
+});
 
-// function init() {
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(initMap, initShowError); //(success, error, options)
-//   } else {
-//     alert("Este navegador no soporta geolocalizacion.");
-//   }
-// }
+
 
 function init() {
   var options = null;
@@ -54,50 +54,3 @@ function initShowError(error) {
   // par.innerHTML = msg;
 }
 
-
-/***
- * 
- */
-
-
-
-function initMapXXX() {
-  return false;
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 45.397, lng: 2.9 },
-    zoom: 8
-  });
-}
-
-
-
-function initMap(position) {
-  var crd = position.coords;
-
-  console.log('Your current position is:');
-  console.log('Latitude : ' + crd.latitude);
-  console.log('Longitude: ' + crd.longitude);
-  console.log('More or less ' + crd.accuracy + ' meters.');
-
-  lon = position.coords.longitude;
-  lat = position.coords.latitude;
-  var myCenter = new google.maps.LatLng(lat, lon);
-
-
-  var mapOptions = {
-    center: myCenter,
-    zoom: 18,
-    mapTypeId: google.maps.MapTypeId.roadmap
-  };
-
-
-  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-  var marker = new google.maps.Marker({
-    position: myCenter,
-    animation: google.maps.Animation.BOUNCE
-  });
-
-  marker.setMap(map);
-
-}
-// google.maps.event.addDomListener(window, 'reload', initMap);
