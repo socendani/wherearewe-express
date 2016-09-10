@@ -56,7 +56,7 @@ app.use(sessions({
 app.use('/', routes);
 
 //Situación
-var dmr_servidor = "http://localhost:3000";
+// var dmr_servidor = "http://localhost:3000";
 
 
 

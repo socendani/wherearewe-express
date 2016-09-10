@@ -1,11 +1,11 @@
 // console.log("1111111111111");
-console.log("Servidor: " + dmr_servidor);
+// console.log("Servidor: " + dmr_servidor);
 
 var roomid = document.getElementById("roomid").value;
 console.log("Room ID => "+roomid);
 // var dmr_servidor = "http://localhost:3000";
 // var socket = io.connect(dmr_servidor,  { 'forceNew': true });
-var socket = io.connect(dmr_servidor);
+var socket = io.connect();
 //Creamos y/o nos unimos
 socket.emit('new_user', roomid);
 
