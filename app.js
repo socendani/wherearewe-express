@@ -100,9 +100,10 @@ app.use(function (err, req, res, next) {
 
 
 //Lògica de Servidor
-io.on('connection', function (socket) {
 
-  var messages = [];
+var messages = [];
+
+io.on('connection', function (socket) {
 
   socket.on('new_user', function (roomid) {
     console.log('Alguien se ha conectado con Sockets a: ' + roomid);
