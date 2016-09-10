@@ -1,22 +1,29 @@
 var express = require('express');
 var router = express.Router();
 
-// var nickname="Mi nick2";
-// var roomid="RDE341";
-// var projecte={name: "Where Are We"};
-var lat = "EE";
-// const projecte=[];
-var projecte = "Where Are We";
-var version="1.1";
+//MiddleWare de autenticación
+function isAuthenticated(req, res, next) {
+
+    // do any checks you want to in here
+
+    // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
+    // you can do this however you want with whatever variables you set up
+    // if (req.user.authenticated)
+    if (req.session.nickname)
+        return next();
+
+    // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+    res.redirect('/');
+}
 
 
 router.post('/login', function (req, res, next) {
-
   //Guardo el nickname y roomid en session
   req.session.nickname = req.body.nickname;
   req.session.roomid = req.body.roomid;
 
-  res.redirect("/");
+  //Si todo es OK.. vamos a la room
+  res.redirect("/room");
 
 });
 
@@ -25,20 +32,21 @@ router.get('/logout', function (req, res, next) {
   res.redirect("/");
 });
 
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  console.info("HOLAAAAA-----------4444444444444");
-  console.log("HOLAAAAA-------------5555555555555");
-  console.log(req.session.nickname);
-  console.log(req.session.roomid);
-  res.render('index', {
-    title: 'WhereAreWe '+version,
-    lat: lat,
-    fraseboton: (req.session.nickname)?"Cambiar":"Entrar",
-    nickname: req.session.nickname,
-    roomid: req.session.roomid,
-    projecte: projecte
-  });
+    //Renderizamos la VISTA
+    res.render('login', {
+      fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
+      nickname: "Pon un nick",
+      roomid: "Habitación"
+      // title: projecte +" " + version
+    });
+});
+
+router.get('/room', isAuthenticated, function (req, res, next) {
+  var controller=require("../controllers/room_controller");
+  controller.init(res,req);
 });
 
 module.exports = router;

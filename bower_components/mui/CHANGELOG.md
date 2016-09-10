@@ -1,5 +1,40 @@
 # MUI Changelog
 
+## 0.7.5 - September 8, 2016
+
+* Added gulp watch task for development
+* Improved handling of focused elements when overlay method is activated
+* Added up/down scroll to overlay by setting focus to overlay element
+* Fixed issue with MUI Angular button attributes (e.g. `type`)
+
+## 0.7.4 - September 2, 2016
+
+* Added support for Optgroups to CSS/JS Select component
+
+## 0.7.3 - August 25, 2016
+
+* Added support for custom className to React Option component
+
+## 0.7.2 - August 24, 2016
+
+* Fixed bug causing React Select component to ignore value change on item
+  click in dropdown menu
+* Removed reset scroll position from overlay teardown
+
+## 0.7.1 - August 21, 2016
+
+* Fixed bug causing React Input and Textarea components with defaultValue to
+  unfloat labels on state update
+
+## 0.7.0 - August 17, 2016
+
+* Fixed bug preventing execution of onFocus callback in React Input and
+  Textarea components
+
+## 0.6.9 - August 11, 2016
+
+* Fixed empty/not-empty CSS bug with React Input and Textarea components
+
 ## 0.6.8 - July 12, 2016
 
 * Changed class name of background color helpers

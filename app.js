@@ -40,7 +40,7 @@ app.use(sessions({
   name: 'session',
   keys: ['key1', 'key2'],
   cookie: {
-    secure: true,
+    // secure: true,
     httpOnly: true,
     // domain: 'example.com',
     // path: 'foo/bar',
@@ -50,11 +50,15 @@ app.use(sessions({
 }));
 
 
+
+
 //Revisar si es necesario esto:
 app.use('/', routes);
 
 //Situación
 var dmr_servidor = "http://localhost:3000";
+
+
 
 
 
@@ -91,6 +95,44 @@ app.use(function (err, req, res, next) {
 });
 
 //TEST SOCKETS.io
+
+//https://scotch.io/tutorials/a-realtime-room-chat-app-using-node-webkit-socket-io-and-mean
+
+
+//Lògica de Servidor
+io.on('connection', function (socket) {
+
+  var messages = [];
+
+  socket.on('new_user', function (roomid) {
+    console.log('Alguien se ha conectado con Sockets a: ' + roomid);
+    //joined
+    socket.join(roomid);  //join al ROOMID
+    //Welcome..
+    messages = [{
+      roomid: roomid,
+      text: "..entrando en " + roomid,
+      nickname: "system"
+    }];
+    console.log("roomid==>" + roomid);
+    socket.in(roomid).emit('messages', messages);
+  });
+
+
+
+
+  // socket.emit('messages', messages);
+  //Nou missatge
+  socket.on('new-message', function (data) {
+    console.log(data);
+    roomid=data.roomid;
+    messages.push(data);
+    // io.sockets.emit('messages', messages);
+    io.sockets.in(roomid).emit('messages', messages);
+  });
+});
+
+
 // io.sockets.on("connection", function (socket) {
 //   socket.on("hello", function (message) {
 //     console.log("Mensaje servidor: " + message);

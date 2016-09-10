@@ -41,10 +41,8 @@ var Select = function (_React$Component) {
   function Select(props) {
     babelHelpers.classCallCheck(this, Select);
 
-
     // warn if value defined but onChange is not
-
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Select).call(this, props));
+    var _this = babelHelpers.possibleConstructorReturn(this, (Select.__proto__ || Object.getPrototypeOf(Select)).call(this, props));
 
     _this.state = {
       showMenu: false
@@ -198,7 +196,7 @@ var Select = function (_React$Component) {
     key: 'hideMenu',
     value: function hideMenu() {
       // remove scroll lock
-      util.disableScrollLock();
+      util.disableScrollLock(true);
 
       // remove event listeners
       jqLite.off(window, 'resize', this.hideMenuCB);
@@ -240,11 +238,10 @@ var Select = function (_React$Component) {
       var className = _props.className;
       var style = _props.style;
       var label = _props.label;
-      var value = _props.value;
       var defaultValue = _props.defaultValue;
       var readOnly = _props.readOnly;
       var useDefault = _props.useDefault;
-      var reactProps = babelHelpers.objectWithoutProperties(_props, ['children', 'className', 'style', 'label', 'value', 'defaultValue', 'readOnly', 'useDefault']);
+      var reactProps = babelHelpers.objectWithoutProperties(_props, ['children', 'className', 'style', 'label', 'defaultValue', 'readOnly', 'useDefault']);
 
 
       return _react2.default.createElement(
@@ -260,7 +257,7 @@ var Select = function (_React$Component) {
           'select',
           babelHelpers.extends({}, reactProps, {
             ref: 'selectEl',
-            value: value,
+            value: this.state.value,
             defaultValue: defaultValue,
             readOnly: this.props.readOnly,
             onChange: this.onInnerChangeCB,
@@ -309,7 +306,7 @@ var Menu = function (_React$Component2) {
   function Menu(props) {
     babelHelpers.classCallCheck(this, Menu);
 
-    var _this3 = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Menu).call(this, props));
+    var _this3 = babelHelpers.possibleConstructorReturn(this, (Menu.__proto__ || Object.getPrototypeOf(Menu)).call(this, props));
 
     _this3.state = {
       origIndex: null,
@@ -429,7 +426,10 @@ var Menu = function (_React$Component2) {
 
       // define menu items
       for (i = 0; i < m; i++) {
-        cls = i === this.state.currentIndex ? 'mui--is-selected' : '';
+        cls = i === this.state.currentIndex ? 'mui--is-selected ' : '';
+
+        // add custom css class from <Option> component
+        cls += optionEls[i].className;
 
         menuItems.push(_react2.default.createElement(
           'div',

@@ -26,20 +26,20 @@ html(lang="en")
     //- script(src='/javascripts/functions.js')
 
   body(onload="init()")
-    include sidenav.jade
+    include ../partials/sidenav.jade
 
     header#header
-      include top.jade
+      include ../partials/top.jade
 
     main#main
           block content
 
     footer#footer
       .mui-container-fluid
-        include footer.jade
+        include ../partials/footer.jade
 script
-  include ../public/javascripts/init.js
-  include ../public/javascripts/functions.js
-  include ../public/javascripts/layout.js
+  include ../../public/javascripts/init.js
+  include ../../public/javascripts/websockets.js
+  include ../../public/javascripts/layout.js
 
      

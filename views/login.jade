@@ -1,0 +1,17 @@
+extends layout/login
+block content
+  .mui-container-fluid(style="margin-top:10%")
+    .mui-panel
+
+       form(name="form_entrada", method="post", action="login")
+          legend Where Are We
+          .mui-textfield
+            input(type="text",name="nickname",placeholder="#{nickname}")
+
+          br
+          .mui-textfield
+            input(type="text",name="roomid",placeholder="#{roomid}")
+
+          br
+          
+          button.mui-btn.mui-btn--raised(type="submit") #{fraseboton}

@@ -18,13 +18,12 @@ var _react2 = babelHelpers.interopRequireDefault(_react);
  * Caret constructor
  * @class
  */
-
 var Caret = function (_React$Component) {
   babelHelpers.inherits(Caret, _React$Component);
 
   function Caret() {
     babelHelpers.classCallCheck(this, Caret);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Caret).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (Caret.__proto__ || Object.getPrototypeOf(Caret)).apply(this, arguments));
   }
 
   babelHelpers.createClass(Caret, [{

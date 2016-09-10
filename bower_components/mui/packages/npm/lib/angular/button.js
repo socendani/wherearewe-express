@@ -31,11 +31,8 @@ var moduleName = 'mui.button',
 _angular2.default.module(moduleName, []).directive('muiButton', function () {
   return {
     restrict: 'AE',
-    scope: {
-      type: '@?'
-    },
     replace: true,
-    template: '<button class="mui-btn" type={{type}} mui-ripple ng-transclude></button>',
+    template: '<button class="mui-btn" mui-ripple ng-transclude></button>',
     transclude: true,
     link: function link(scope, element, attrs) {
       var isUndef = _angular2.default.isUndefined,
@@ -50,7 +47,7 @@ _angular2.default.module(moduleName, []).directive('muiButton', function () {
         element.prop('disabled', true);
       }
 
-      // set button styles       
+      // set button styles        
       _angular2.default.forEach(['variant', 'color', 'size'], function (attrName) {
         var attrVal = attrs[attrName];
         if (attrVal) element.addClass('mui-btn--' + attrVal);

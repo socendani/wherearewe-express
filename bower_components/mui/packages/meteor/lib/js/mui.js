@@ -58,7 +58,7 @@ module.exports = {
 
 var wrapperPadding = 15,  // from CSS
     inputHeight = 32,  // from CSS
-    optionHeight = 42,  // from CSS
+    rowHeight = 42,  // from CSS
     menuPadding = 8;  // from CSS
 
 
@@ -66,18 +66,18 @@ var wrapperPadding = 15,  // from CSS
  * Menu position/size/scroll helper
  * @returns {Object} Object with keys 'height', 'top', 'scrollTop'
  */
-function getMenuPositionalCSSFn(wrapperEl, numOptions, currentIndex) {
+function getMenuPositionalCSSFn(wrapperEl, numRows, selectedRow) {
   var viewHeight = document.documentElement.clientHeight;
 
   // determine 'height'
-  var h = numOptions * optionHeight + 2 * menuPadding,
+  var h = numRows * rowHeight + 2 * menuPadding,
       height = Math.min(h, viewHeight);
 
   // determine 'top'
   var top, initTop, minTop, maxTop;
 
-  initTop = (menuPadding + optionHeight) - (wrapperPadding + inputHeight);
-  initTop -= currentIndex * optionHeight;
+  initTop = (menuPadding + rowHeight) - (wrapperPadding + inputHeight);
+  initTop -= selectedRow * rowHeight;
 
   minTop = -1 * wrapperEl.getBoundingClientRect().top;
   maxTop = (viewHeight - height) + minTop;
@@ -90,9 +90,9 @@ function getMenuPositionalCSSFn(wrapperEl, numOptions, currentIndex) {
       scrollMax;
 
   if (h > viewHeight) {
-    scrollIdeal = (menuPadding + (currentIndex + 1) * optionHeight) -
+    scrollIdeal = (menuPadding + (selectedRow + 1) * rowHeight) -
       (-1 * top + wrapperPadding + inputHeight);
-    scrollMax = numOptions * optionHeight + 2 * menuPadding - height;
+    scrollMax = numRows * rowHeight + 2 * menuPadding - height;
     scrollTop = Math.min(scrollIdeal, scrollMax);
   }
 
@@ -688,7 +688,7 @@ function dispatchEventFn(element, eventType, bubbles, cancelable, data) {
  */
 function enableScrollLockFn() {
   // increment counter
-  scrollLock += 1
+  scrollLock += 1;
 
   // add lock
   if (scrollLock === 1) {
@@ -704,13 +704,14 @@ function enableScrollLockFn() {
 
 /**
  * Turn off window scroll lock.
+ * @param {Boolean} resetPos - Reset scroll position to original value.
  */
-function disableScrollLockFn() {
+function disableScrollLockFn(resetPos) {
   // ignore
   if (scrollLock === 0) return;
 
   // decrement counter
-  scrollLock -= 1
+  scrollLock -= 1;
 
   // remove lock 
   if (scrollLock === 0) {
@@ -718,7 +719,7 @@ function disableScrollLockFn() {
         doc = document;
 
     jqLite.removeClass(doc.body, scrollLockCls);
-    win.scrollTo(scrollLockPos.left, scrollLockPos.top);
+    if (resetPos) win.scrollTo(scrollLockPos.left, scrollLockPos.top);
   }
 }
 
@@ -900,7 +901,8 @@ var util = require('./lib/util'),
     jqLite = require('./lib/jqLite'),
     overlayId = 'mui-overlay',
     bodyClass = 'mui--overflow-hidden',
-    iosRegex = /(iPad|iPhone|iPod)/g;
+    iosRegex = /(iPad|iPhone|iPod)/g,
+    activeElement;
 
 
 /**
@@ -941,6 +943,7 @@ function overlayFn(action) {
   } else {
     // raise error
     util.raiseError("Expecting 'on' or 'off'");
+
   }
 
   return overlayEl;
@@ -953,17 +956,21 @@ function overlayFn(action) {
  * @param {Element} childElement - The child element.
  */
 function overlayOn(options, childElement) {
-  var bodyEl = document.body,
-      overlayEl = document.getElementById(overlayId);
-    
+  var doc = document,
+      bodyEl = doc.body,
+      overlayEl = doc.getElementById(overlayId);
+
+  // cache activeElement
+  if (doc.activeElement) activeElement = doc.activeElement;
+
   // add overlay
   util.enableScrollLock();
-  //jqLite.addClass(bodyEl, bodyClass);
 
   if (!overlayEl) {
     // create overlayEl
-    overlayEl = document.createElement('div');
+    overlayEl = doc.createElement('div');
     overlayEl.setAttribute('id', overlayId);
+    overlayEl.setAttribute('tabindex', '-1');
     
     // add child element
     if (childElement) overlayEl.appendChild(childElement);
@@ -992,6 +999,9 @@ function overlayOn(options, childElement) {
 
   // attach options
   overlayEl.muiOptions = options;
+
+  // focus overlay element
+  overlayEl.focus();
 
   return overlayEl;
 }
@@ -1022,6 +1032,9 @@ function overlayOff() {
 
   // remove keyup handler
   removeKeyupHandler();
+
+  // return focus to activeElement
+  if (activeElement) activeElement.focus();
 
   // execute callback
   if (callbackFn) callbackFn();
@@ -1317,7 +1330,7 @@ Select.prototype.focusHandler = function(ev) {
 
   var selectEl = this.selectEl,
       wrapperEl = this.wrapperEl,
-      origIndex = selectEl.tabIndex,
+      tabIndex = selectEl.tabIndex,
       keydownFn = util.callback(this, 'keydownHandler');
 
   // attach keydown handler
@@ -1326,7 +1339,7 @@ Select.prototype.focusHandler = function(ev) {
   // disable tabfocus once
   selectEl.tabIndex = -1;
   jqLite.one(wrapperEl, 'blur', function() {
-    selectEl.tabIndex = origIndex;
+    selectEl.tabIndex = tabIndex;
     jqLite.off(doc, 'keydown', keydownFn);
   });
   
@@ -1391,6 +1404,7 @@ function Menu(wrapperEl, selectEl) {
   util.enableScrollLock();
 
   // instance variables
+  this.indexMap = {};
   this.origIndex = null;
   this.currentIndex = null;
   this.selectEl = selectEl;
@@ -1428,40 +1442,75 @@ function Menu(wrapperEl, selectEl) {
  */
 Menu.prototype._createMenuEl = function(wrapperEl, selectEl) {
   var menuEl = doc.createElement('div'),
-      optionEls = selectEl.children,
-      numOptions = optionEls.length,
-      selectedPos = 0,
-      optionEl,
-      itemEl,
-      i;
+      childEls = selectEl.children,
+      indexNum = 0,
+      indexMap = this.indexMap,
+      selectedRow = 0,
+      loopEl,
+      rowEl,
+      optionEls,
+      inGroup,
+      i,
+      iMax,
+      j,
+      jMax;
 
   menuEl.className = menuClass;
 
-  // add options
-  for (i=0; i < numOptions; i++) {
-    optionEl = optionEls[i];
+  for (i=0, iMax=childEls.length; i < iMax; i++) {
+    loopEl = childEls[i];
 
-    itemEl = doc.createElement('div');
-    itemEl.textContent = optionEl.textContent;
-    itemEl._muiPos = i;
+    if (loopEl.tagName === 'OPTGROUP') {
+      // add row item to menu
+      rowEl = doc.createElement('div');
+      rowEl.textContent = loopEl.label;
+      rowEl.className = 'mui-optgroup__label';
+      menuEl.appendChild(rowEl);
 
-    if (optionEl.selected) {
-      itemEl.setAttribute('class', selectedClass);
-      selectedPos = i;
+      inGroup = true;
+      optionEls = loopEl.children;
+    } else {
+      inGroup = false;
+      optionEls = [loopEl];
     }
 
-    menuEl.appendChild(itemEl);
+    // loop through option elements
+    for (j=0, jMax=optionEls.length; j < jMax; j++) {
+      loopEl = optionEls[j];
+
+      // add row item to menu
+      rowEl = doc.createElement('div');
+      rowEl.textContent = loopEl.textContent;
+      rowEl._muiIndex = indexNum;
+
+      // handle selected options
+      if (loopEl.selected) {
+        rowEl.className = selectedClass;
+        selectedRow = menuEl.children.length;
+      }
+
+      // handle optgroup options
+      if (inGroup) jqLite.addClass(rowEl, 'mui-optgroup__option');
+
+      menuEl.appendChild(rowEl);
+
+      // add to index map
+      indexMap[indexNum] = rowEl;
+      indexNum += 1;
+    }
   }
 
   // save indices
-  this.origIndex = selectedPos;
-  this.currentIndex = selectedPos;
+  var selectedIndex = selectEl.selectedIndex;
+
+  this.origIndex = selectedIndex;
+  this.currentIndex = selectedIndex;
 
   // set position
   var props = formlib.getMenuPositionalCSS(
     wrapperEl,
-    numOptions,
-    selectedPos
+    menuEl.children.length,
+    selectedRow
   );
 
   jqLite.css(menuEl, props);
@@ -1507,13 +1556,13 @@ Menu.prototype.clickHandler = function(ev) {
   // don't allow events to bubble
   ev.stopPropagation();
 
-  var pos = ev.target._muiPos;
+  var index = ev.target._muiIndex;
 
   // ignore clicks on non-items                                               
-  if (pos === undefined) return;
+  if (index === undefined) return;
 
   // select option
-  this.currentIndex = pos;
+  this.currentIndex = index;
   this.selectCurrent();
 
   // destroy menu
@@ -1525,13 +1574,14 @@ Menu.prototype.clickHandler = function(ev) {
  * Increment selected item
  */
 Menu.prototype.increment = function() {
-  if (this.currentIndex === this.menuEl.children.length - 1) return;
+  if (this.currentIndex === this.selectEl.length - 1) return;
 
-  var optionEls = this.menuEl.children;
-  
-  jqLite.removeClass(optionEls[this.currentIndex], selectedClass);
+  // un-select old row
+  jqLite.removeClass(this.indexMap[this.currentIndex], selectedClass);
+
+  // select new row
   this.currentIndex += 1;
-  jqLite.addClass(optionEls[this.currentIndex], selectedClass);
+  jqLite.addClass(this.indexMap[this.currentIndex], selectedClass);
 }
 
 
@@ -1541,11 +1591,12 @@ Menu.prototype.increment = function() {
 Menu.prototype.decrement = function() {
   if (this.currentIndex === 0) return;
 
-  var optionEls = this.menuEl.children;
+  // un-select old row
+  jqLite.removeClass(this.indexMap[this.currentIndex], selectedClass);
 
-  jqLite.removeClass(optionEls[this.currentIndex], selectedClass);
+  // select new row
   this.currentIndex -= 1;
-  jqLite.addClass(optionEls[this.currentIndex], selectedClass);
+  jqLite.addClass(this.indexMap[this.currentIndex], selectedClass);
 }
 
 
@@ -1554,9 +1605,7 @@ Menu.prototype.decrement = function() {
  */
 Menu.prototype.selectCurrent = function() {
   if (this.currentIndex !== this.origIndex) {
-    var optionEls = this.selectEl.children;
-    optionEls[this.origIndex].selected = false;
-    optionEls[this.currentIndex].selected = true;
+    this.selectEl.selectedIndex = this.currentIndex;
 
     // trigger change event
     util.dispatchEvent(this.selectEl, 'change');
@@ -1575,7 +1624,7 @@ Menu.prototype.destroy = function() {
   this.selectEl.focus();
 
   // remove scroll lock
-  util.disableScrollLock();
+  util.disableScrollLock(true);
 
   // remove event handlers
   jqLite.off(this.menuEl, 'click', this.clickCallbackFn);

@@ -18,13 +18,12 @@ var _react2 = babelHelpers.interopRequireDefault(_react);
  * Container constructor
  * @class
  */
-
 var Container = function (_React$Component) {
   babelHelpers.inherits(Container, _React$Component);
 
   function Container() {
     babelHelpers.classCallCheck(this, Container);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Container).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (Container.__proto__ || Object.getPrototypeOf(Container)).apply(this, arguments));
   }
 
   babelHelpers.createClass(Container, [{

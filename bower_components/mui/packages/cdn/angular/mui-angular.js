@@ -64,26 +64,27 @@ var wrapperPadding = 15,
     // from CSS
 inputHeight = 32,
     // from CSS
-optionHeight = 42,
+rowHeight = 42,
     // from CSS
 menuPadding = 8; // from CSS
+
 
 /**
  * Menu position/size/scroll helper
  * @returns {Object} Object with keys 'height', 'top', 'scrollTop'
  */
-function getMenuPositionalCSSFn(wrapperEl, numOptions, currentIndex) {
+function getMenuPositionalCSSFn(wrapperEl, numRows, selectedRow) {
   var viewHeight = document.documentElement.clientHeight;
 
   // determine 'height'
-  var h = numOptions * optionHeight + 2 * menuPadding,
+  var h = numRows * rowHeight + 2 * menuPadding,
       height = Math.min(h, viewHeight);
 
   // determine 'top'
   var top, initTop, minTop, maxTop;
 
-  initTop = menuPadding + optionHeight - (wrapperPadding + inputHeight);
-  initTop -= currentIndex * optionHeight;
+  initTop = menuPadding + rowHeight - (wrapperPadding + inputHeight);
+  initTop -= selectedRow * rowHeight;
 
   minTop = -1 * wrapperEl.getBoundingClientRect().top;
   maxTop = viewHeight - height + minTop;
@@ -96,8 +97,8 @@ function getMenuPositionalCSSFn(wrapperEl, numOptions, currentIndex) {
       scrollMax;
 
   if (h > viewHeight) {
-    scrollIdeal = menuPadding + (currentIndex + 1) * optionHeight - (-1 * top + wrapperPadding + inputHeight);
-    scrollMax = numOptions * optionHeight + 2 * menuPadding - height;
+    scrollIdeal = menuPadding + (selectedRow + 1) * rowHeight - (-1 * top + wrapperPadding + inputHeight);
+    scrollMax = numRows * rowHeight + 2 * menuPadding - height;
     scrollTop = Math.min(scrollIdeal, scrollMax);
   }
 
@@ -538,7 +539,7 @@ function loadStyleFn(cssText) {
   var doc = document,
       head;
 
-  // copied from jQuery
+  // copied from jQuery 
   head = doc.head || doc.getElementsByTagName('head')[0] || doc.documentElement;
 
   var e = doc.createElement('style');
@@ -680,21 +681,22 @@ function enableScrollLockFn() {
 
 /**
  * Turn off window scroll lock.
+ * @param {Boolean} resetPos - Reset scroll position to original value.
  */
-function disableScrollLockFn() {
+function disableScrollLockFn(resetPos) {
   // ignore
   if (scrollLock === 0) return;
 
   // decrement counter
   scrollLock -= 1;
 
-  // remove lock
+  // remove lock 
   if (scrollLock === 0) {
     var win = window,
         doc = document;
 
     jqLite.removeClass(doc.body, scrollLockCls);
-    win.scrollTo(scrollLockPos.left, scrollLockPos.top);
+    if (resetPos) win.scrollTo(scrollLockPos.left, scrollLockPos.top);
   }
 }
 
@@ -813,11 +815,8 @@ var moduleName = 'mui.button',
 _angular2.default.module(moduleName, []).directive('muiButton', function () {
   return {
     restrict: 'AE',
-    scope: {
-      type: '@?'
-    },
     replace: true,
-    template: '<button class="mui-btn" type={{type}} mui-ripple ng-transclude></button>',
+    template: '<button class="mui-btn" mui-ripple ng-transclude></button>',
     transclude: true,
     link: function link(scope, element, attrs) {
       var isUndef = _angular2.default.isUndefined,
@@ -832,7 +831,7 @@ _angular2.default.module(moduleName, []).directive('muiButton', function () {
         element.prop('disabled', true);
       }
 
-      // set button styles       
+      // set button styles        
       _angular2.default.forEach(['variant', 'color', 'size'], function (attrName) {
         var attrVal = attrs[attrName];
         if (attrVal) element.addClass('mui-btn--' + attrVal);
@@ -1241,7 +1240,7 @@ _angular2.default.module(moduleName, []).directive('muiDropdown', ['$timeout', '
         $event.preventDefault();
         $event.stopPropagation();
 
-        // toggle open
+        // toggle open 
         if (scope.open) scope.open = false;else scope.open = true;
       };
     }
@@ -1777,7 +1776,7 @@ _angular2.default.module(moduleName, []).directive('muiSelect', ['$timeout', fun
           selectEl[0].focus();
 
           // disable scroll lock
-          util.disableScrollLock();
+          util.disableScrollLock(true);
 
           // remove event handlers
           jqLite.off(document, 'click', closeMenuFn);

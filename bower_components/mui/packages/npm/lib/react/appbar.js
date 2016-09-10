@@ -18,13 +18,12 @@ var _react2 = babelHelpers.interopRequireDefault(_react);
  * Appbar constructor
  * @class
  */
-
 var Appbar = function (_React$Component) {
   babelHelpers.inherits(Appbar, _React$Component);
 
   function Appbar() {
     babelHelpers.classCallCheck(this, Appbar);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Appbar).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (Appbar.__proto__ || Object.getPrototypeOf(Appbar)).apply(this, arguments));
   }
 
   babelHelpers.createClass(Appbar, [{

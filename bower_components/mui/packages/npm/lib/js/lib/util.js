@@ -176,7 +176,7 @@ function dispatchEventFn(element, eventType, bubbles, cancelable, data) {
  */
 function enableScrollLockFn() {
   // increment counter
-  scrollLock += 1
+  scrollLock += 1;
 
   // add lock
   if (scrollLock === 1) {
@@ -192,13 +192,14 @@ function enableScrollLockFn() {
 
 /**
  * Turn off window scroll lock.
+ * @param {Boolean} resetPos - Reset scroll position to original value.
  */
-function disableScrollLockFn() {
+function disableScrollLockFn(resetPos) {
   // ignore
   if (scrollLock === 0) return;
 
   // decrement counter
-  scrollLock -= 1
+  scrollLock -= 1;
 
   // remove lock 
   if (scrollLock === 0) {
@@ -206,7 +207,7 @@ function disableScrollLockFn() {
         doc = document;
 
     jqLite.removeClass(doc.body, scrollLockCls);
-    win.scrollTo(scrollLockPos.left, scrollLockPos.top);
+    if (resetPos) win.scrollTo(scrollLockPos.left, scrollLockPos.top);
   }
 }
 

@@ -40,7 +40,7 @@ var Option = function (_React$Component) {
 
   function Option() {
     babelHelpers.classCallCheck(this, Option);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Option).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (Option.__proto__ || Object.getPrototypeOf(Option)).apply(this, arguments));
   }
 
   babelHelpers.createClass(Option, [{
@@ -69,6 +69,7 @@ Option.propTypes = {
   label: PropTypes.string
 };
 Option.defaultProps = {
+  className: '',
   label: null
 };
 exports.default = Option;
