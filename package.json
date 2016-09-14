@@ -1,29 +1,33 @@
 {
-  "name": "wherearewe-express",
-  "description": "Where Are We WebSite for map-chat friends around",
-  "version": "1.0.1",
-  "private": true,
-  "scripts": {
-    "dani": "nodemon ./bin/www2",
-    "test": "nodemon ./bin/www2",
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "body-parser": "~1.15.1",
-    "cookie-parser": "~1.4.3",
-    "cors": "^2.7.1",
-    "debug": "~2.2.0",
-    "express": "~4.13.4",
-    "express-session": "^1.14.1",
-    "jade": "~1.11.0",
-    "morgan": "^1.7.0",
-    "serve-favicon": "~2.3.0",
-    "socket.io": "^1.4.8"
-  },
-  "devDependencies": {
-    "exists-sync": "0.0.3",
-    "gulp": "^3.9.1",
-    "gulp-minify": "0.0.13",
-    "gulp-sass": "^2.3.2"
-  }
+    "name": "wherearewe-express",
+    "description": "Where Are We WebSite for map-chat friends around",
+    "version": "1.0.1",
+    "private": true,
+    "scripts": {
+        "dani": "nodemon ./bin/www2",
+        "test": "nodemon ./bin/www2",
+        "start": "node ./bin/www",
+        "postinstall": "bower install",
+        "heroku-prebuild": "echo DMR:: This runs before Heroku installs your dependencies.",
+        "heroku-postbuild": "echo DMR:: This runs afterwards."
+    },
+    "dependencies": {
+        "bower": "*",
+        "body-parser": "~1.15.1",
+        "cookie-parser": "~1.4.3",
+        "cors": "^2.7.1",
+        "debug": "~2.2.0",
+        "express": "~4.13.4",
+        "express-session": "^1.14.1",
+        "jade": "~1.11.0",
+        "morgan": "^1.7.0",
+        "serve-favicon": "~2.3.0",
+        "socket.io": "^1.4.8"
+    },
+    "devDependencies": {
+        "exists-sync": "0.0.3",
+        "gulp": "^3.9.1",
+        "gulp-minify": "0.0.13",
+        "gulp-sass": "^2.3.2"
+    }
 }
