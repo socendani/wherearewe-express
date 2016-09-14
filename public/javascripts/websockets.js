@@ -26,6 +26,11 @@ socket.on('usuarios', function (data) {
     actualizarMapa(data);
 })
 
+socket.on('posicion', function (usuario, lat, lng) {
+    console.log("messages-cli: "+usuario+". lang: "+lat+", lng: "+lng);
+    actualizarChat(usuario, "messages-cli: "+usuario+". lang: "+lat+", lng: "+lng);  //temporalmente
+})
+
 
 
 

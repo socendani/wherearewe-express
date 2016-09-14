@@ -19,8 +19,8 @@ function isAuthenticated(req, res, next) {
 
 router.post('/login', function (req, res, next) {
   //Guardo el nickname y roomid en session
-  req.session.nickname = req.body.nickname;
-  req.session.roomid = req.body.roomid;
+  req.session.nickname = req.body.nickname.toLowerCase();
+  req.session.roomid = req.body.roomid.toLowerCase();
 
   //Si todo es OK.. vamos a la room
   res.redirect("/room");

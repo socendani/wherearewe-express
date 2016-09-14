@@ -8,8 +8,8 @@
 
 /************** GLOBALES ****************/
 var yo;
-var nickname = document.getElementById("nickname").value;
-var roomid = document.getElementById("roomid").value;
+var nickname = document.getElementById("nickname").value.toLowerCase();
+var roomid = document.getElementById("roomid").value.toLowerCase();
 var socket = io.connect();
 
 
@@ -18,12 +18,11 @@ $(document).ready(function () {
 
     //Inicio de emision
     socket.emit("new-user", {nickname: nickname, roomid: roomid}, function (data) {
-        console.info(data);
-        socket.emit("user-join");
+        socket.emit("user-join", data);
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
 
-//  setInterval('emitimosPosicion()', 10000);
+    setInterval('emitimosPosicion()', 5000);
     $('.button-collapse').sideNav({'edge': 'left'});
 });
 
@@ -73,7 +72,7 @@ function initShowError(error) {
             msg = "Ocurrio un error desconocido.";
             break;
     }
-    alert(msg);
+    consol.error(msg);
     // par.innerHTML = msg;
 }
 

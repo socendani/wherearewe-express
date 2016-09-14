@@ -3,10 +3,10 @@
     .nav-wrapper
         a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
           i.material-icons menu
-        span  nick: <b>#{nickname}</b>.  roomid: <b>#{roomid}</b>.My position: <b>#{lat}, #{long}</b>
+        span  nick: <b>#{nickname}</b>.  roomid: <b>#{roomid}</b>.My position: <b>#{lat}, #{lng}</b>
         div
-          input(type="hidden",id="roomid", value="#{roomid}")
-          input(type="hidden",id="nickname", value="#{nickname}")
-          input(type="hidden",id="lat", value="#{lat}")
-          input(type="hidden",id="long", value="#{long}")
+          input(type="type",id="roomid", value="#{roomid}")
+          input(type="type",id="nickname", value="#{nickname}")
+          input(type="type",id="lat", value="#{lat}")
+          input(type="type",id="lng", value="#{lng}")
       
