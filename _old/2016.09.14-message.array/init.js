@@ -17,11 +17,8 @@ var socket = io.connect();
 $(document).ready(function () {
 
     //Inicio de emision
-    socket.emit("new-user", {nickname: nickname, roomid: roomid}, function (data) {
-        console.info(data);
-        socket.emit("user-join");
-    });
-//    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
+    socket.emit('new-user', {nickname: nickname, roomid: roomid});
+    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
 
 //  setInterval('emitimosPosicion()', 10000);
     $('.button-collapse').sideNav({'edge': 'left'});

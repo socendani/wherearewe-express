@@ -11,17 +11,15 @@ html(lang="en")
     // if lt IE 9
       script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
 
-  block css
-    link(rel='stylesheet', href='/stylesheets/style.css')
+   block css
+    //- link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/icon?family=Material+Icons')
-    link(rel='stylesheet', href='/bower_components/mui/packages/cdn/css/mui.min.css')
+    link(rel='stylesheet', href='/bower_components/materialize/dist/css/materialize.min.css')
     link(rel='stylesheet', href='/stylesheets/project.css')
 
  block top-scripts
-    //- script(src='//maps.googleapis.com/maps/api/js?key=&callback=initMap', asyn, defer)
     script(src='/bower_components/jquery/dist/jquery.min.js')
-    script(src='/bower_components/mui/packages/cdn/js/mui.min.js')
-    //- script(src='/javascripts/functions.js')
+    script(src='/bower_components/materialize/dist/js/materialize.min.js')
 
   body
 

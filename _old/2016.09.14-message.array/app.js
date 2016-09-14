@@ -108,52 +108,49 @@ app.use(function (err, req, res, next) {
 
 io.on('connection', function (socket) {
 
-    function socketlog(socket, mensaje) {
-//        console.log("-- SOCKET --");
-//        console.log(socket);
-        console.log("-- Socket.roomid:" + socket.roomid);
-        console.log("-- Socket.nickname:" + socket.nickname);
-        console.log("-- mensaje:" + mensaje);
-
-    }
 
 
-    socket.on('new-user', function (data, fn) {
+    socket.on('new-user', function (data) {
+        roomid = data.roomid;
+        nickname = data.nickname;
+        console.log(nickname + ', se ha conectado con Sockets a la Room ' + roomid);
+        
+        
         //Mantenmos la session socket con el usuario ... 
-        socket.nickname = data.nickname; //esto .. no funciona¿?
-        socket.roomid = data.roomid;
-        socket.join(socket.roomid);  //join al ROOMID
-
-//        socketlog(socket);
-        console.log(data.nickname + ', se ha conectado con Sockets a la Room ' + data.roomid);
+        socket.nickname = nickname; //esto .. no funciona¿?
+        socket.roomid = roomid;
+        socket.join(roomid);  //join al ROOMID
 
         var User = require("./models/users.js").User;
         User.add(data);
+        //Welcome..NO NEED
+        messages = [{
+                roomid: roomid,
+                text: nickname + " entrando en sala (" + roomid + ")",
+                nickname: ""
+            }];
+        socket.in(roomid).emit('messages', messages);
 
-        //Callback client
-        fn({data: "some random data"});
+        //Recogemos los mensages anteriores?
 
     });
 
-    socket.on('user-join', function (data) {
-        //Este mensaje NO lo hace
-        mensaje = socket.nickname + " entrando en sala (" + socket.roomid + ")";
-        socketlog(socket, mensaje);
-        socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-    });
 
-    // socket.emit('messages', messages);   
+    // socket.emit('messages', messages);
     //Nou missatge
-    socket.on('new-message', function (mensaje) {
+    socket.on('new-message', function (data) {
 //        console.log("new-message => " + data);
-        console.log(mensaje);
+        console.log(data);
 
-        socketlog(socket);
+        console.log("-- RoomID:" + data.roomid);
+        console.log("-- Socket.roomid:" + socket.roomid);
+        console.log("-- Socket.nickname:" + socket.nickname);
+
 
 //        roomid = data.roomid;
         // messages.push(data);
         // io.sockets.emit('messages', messages);
-        io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
+        io.sockets.in(socket.roomid).emit('messages', data);
     });
 
     //Rebem la nova posició del usuaris d'un usuari i actualitzem 

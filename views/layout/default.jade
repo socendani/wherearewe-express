@@ -12,9 +12,9 @@ html(lang="en")
       script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
 
   block css
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    //- link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/icon?family=Material+Icons')
-    link(rel='stylesheet', href='/bower_components/mui/packages/cdn/css/mui.min.css')
+    link(rel='stylesheet', href='/bower_components/materialize/dist/css/materialize.min.css')
     link(rel='stylesheet', href='/stylesheets/project.css')
 
  block top-scripts
@@ -22,25 +22,23 @@ html(lang="en")
     script(src='//maps.googleapis.com/maps/api/js?key=AIzaSyBBpFgxy2WkFuFI-l9wPISLpVsmPAcHEG4&callback=initMap', asyn, defer)
     script(src='/socket.io/socket.io.js')
     script(src='/bower_components/jquery/dist/jquery.min.js')
-    script(src='/bower_components/mui/packages/cdn/js/mui.min.js')
+    script(src='/bower_components/materialize/dist/js/materialize.min.js')
     //- script(src='/javascripts/functions.js')
 
   body(onload="init()")
-    include ../partials/sidenav.jade
+    
+    header
+      include ../partials/sidenav.jade
 
-    header#header
+    main
       include ../partials/top.jade
+      block content
 
-    main#main
-          block content
-
-    footer#footer
-      .mui-container-fluid
-        include ../partials/footer.jade
+    //- footer
+    //-     include ../partials/footer.jade
 script
   include ../../public/javascripts/init.js
   include ../../public/javascripts/map.js
   include ../../public/javascripts/websockets.js
-  include ../../public/javascripts/layout.js
 
      

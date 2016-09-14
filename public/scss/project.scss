@@ -1,23 +1,34 @@
-@import "bower_components/mui/src/sass/mui/colors";
-body {
-  background-color: mui-color('purple', '50');
-}
+$break-small: 320px;
+$break-large: 992px;
+$break-extralarge:1201px;
+
+
+// body {
+//   @extend .blue, .lighten-2;
+// }
+
 
 /* DMR-START: Para el STICKY FOOTER !!! */
-body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
+// body {
+//     display: flex;
+//     min-height: 100vh;
+//     flex-direction: column;
+//   }
 
- #main {
-    flex: 1 0 auto;
-  }
+//  #main {
+//     flex: 1 0 auto;
+//   }
 /* DMR-END: Para el STICKY FOOTER !!! */
 
 /*********** ..dddMAP *************/
+
+main {
+  min-height:1500px;
+}
 #map {
-  min-height:80vh;
+  // min-height:80vh;
+  // min-height:130vh;
+  min-height:1500px;
   // height:100%;
   width:100%
 }
@@ -33,5 +44,24 @@ body {
     color: red;
   }
 }
+
+.gm-style {
+  min-height:1500px;
+}
+
+/************ RESPONSIVE  ********/
+header, main, footer {padding-left:0}
+@media  screen and (min-width: $break-large) {
+  header, main, footer{padding-left:200px}
+}
+@media  screen and (min-width: $break-extralarge) {
+  header, main, footer{padding-left:120px}
+}
+// @media  screen and (max-width: $break-large) {
+    
+//   }
+// @media (min-height: 40.125em) {
+
+  
 
 

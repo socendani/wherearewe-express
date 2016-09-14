@@ -1,18 +1,4 @@
-/**
- * MUI Colors module
- */
-body {
-  background-color: #F3E5F5; }
-
 /* DMR-START: Para el STICKY FOOTER !!! */
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column; }
-
-#main {
-  flex: 1 0 auto; }
-
 /* DMR-END: Para el STICKY FOOTER !!! */
 /*********** ..dddMAP *************/
 #map {
@@ -27,3 +13,15 @@ body {
 
 #messages .chat-user-me {
   color: red; }
+
+/************ RESPONSIVE  ********/
+header, main, footer {
+  padding-left: 0; }
+
+@media screen and (min-width: 992px) {
+  header, main, footer {
+    padding-left: 200px; } }
+
+@media screen and (min-width: 1201px) {
+  header, main, footer {
+    padding-left: 120px; } }

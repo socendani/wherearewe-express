@@ -1,24 +1,30 @@
-#sidedrawer.mui--no-user-select
-  #sidedrawer-brand.mui--appbar-line-height.mui--text-title WaW (#{roomid})
-  .mui-divider
-  .row-fluid
-   .mui-divider
+.container
+  div#nav-mobile.side-nav.fixed
+    .row(style="margin:5px")
+      h3.header.center Where are We 
+            
+      div.center (#{roomid})    
+        if nickname 
+            a(href="/logout",style="display:inline")  
+                i.material-icons launch
 
-    .row-fluid(style="margin:5px")
-      form(method='post',onsubmit="return addMessage(this)")
-        input(type="hidden",name="roomid",id="roomid",value="#{roomid}")
-        input(type="hidden",name="nickname",id="nickname",value="#{nickname}")
-        .mui-textfield
-            input(type="text",name="texto",id="texto",placeholder="Chat..")
+      .card.light-blue.darken-3
+        .card-content.black-text.center
+          //- .row-fluid(style="margin:5px")
+          form(method='post',onsubmit="return addMessage(this)")
+              input(type="hidden",name="roomid",id="roomid",value="#{roomid}")
+              input(type="hidden",name="nickname",id="nickname",value="#{nickname}")
+              input.input-field(type="text",name="texto",id="texto",placeholder="Chat..")
 
-        button.mui-btn.mui-btn--raised(type="submit") Enviar!
-        
-
-    .container(style='margin:10px')
-      if nickname 
-        a(href="/logout") Logout
+              button.btn.waves-effect.waves-light(type="submit") 
+                i.material-icons send
+          
+    .row(style='margin:10px')
+     
 
       hr
       .chat(name="messages", id="messages")
 
+
+  
  

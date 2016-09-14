@@ -1,59 +1,72 @@
 // console.log("1111111111111");
 // console.log("Servidor: " + dmr_servidor);
 
-var nickname = document.getElementById("nickname").value;
-var roomid = document.getElementById("roomid").value;
 
-console.log("Room ID => " + roomid);
+
+// console.log("Room ID => " + roomid);
 // var dmr_servidor = "http://localhost:3000";
 // var socket = io.connect(dmr_servidor,  { 'forceNew': true });
-var socket = io.connect();
+//var socket = io.connect();
 //Creamos y/o nos unimos
-socket.emit('new-user', { nickname: nickname, roomid: roomid } );
+//socket.emit('new-user', { nickname: nickname, roomid: roomid } );
 
 //Emitimos nuestra bienvenida
-socket.emit('new-message', { nickname: nickname, roomid: roomid, text: nickname + " entrando en sala" });
+//socket.emit('new-message', { nickname: nickname, roomid: roomid, text: nickname + " entrando en sala" });
 
+
+/**********  Client Socket Receipt Functions ********/
 //Pintar mensajes recibidos
-socket.on('messages', function (data) {
-  actualizarChat(data);
+socket.on('messages', function (usuario, mensaje) {
+    console.log("messages-cli: "+usuario+" - "+mensaje);
+    actualizarChat(usuario, mensaje);
 })
 
 //Pintar usuarios en el mapa
 socket.on('usuarios', function (data) {
-  actualizarMapa(data);
+    actualizarMapa(data);
 })
 
 
 
 
 /**********  Client Functions ********/
-
-
-function actualizarChat(data) {
-  data.reverse();
-  var html = data.map(function (elem, index) {
+function actualizarChat(usuario, mensaje) {
+//    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);
     chat_user = "chat-user";
-    if (nickname == elem.nickname) {
-      chat_user = "chat-user-me";
-      elem.nickname = "Yo";
+    if (nickname == usuario) {
+        chat_user = "chat-user-me";
+        usuario = "Yo";
     }
-    // console.log(elem.nickname+"="+elem.text);
-    return ('<div class="' + chat_user + '"><b>' + elem.nickname + ':</b><em>' + elem.text + '</em></div>');
-  }).join(" ");
-
-  document.getElementById('messages').innerHTML = html;
+    html = '<div class="' + chat_user + '"><b>' + usuario + ':</b><em>' + mensaje + '</em></div>';
+    $('#messages').prepend(html);
 }
 
-function addMessage(e) {
-  var message = {
-    roomid: document.getElementById('roomid').value,
-    nickname: document.getElementById('nickname').value,
-    text: document.getElementById('texto').value
-  };
-  // console.log(message);
-  socket.emit('new-message', message);
-  document.getElementById('texto').value = "";
-  return false;
+//function NOTUSE_actualizarChat_OLD(data) {
+//    data.reverse();
+//    var html = data.map(function (elem, index) {
+//        chat_user = "chat-user";
+//        if (nickname == elem.nickname) {
+//            chat_user = "chat-user-me";
+//            elem.nickname = "Yo";
+//        }
+//        console.log("actualizarChat => " + elem.nickname + "=" + elem.text);
+//        return ('<div class="' + chat_user + '"><b>' + elem.nickname + ':</b><em>' + elem.text + '</em></div>');
+//    }).join(" ");
+//
+//    document.getElementById('messages').innerHTML = html;
+//}
+
+function addMessage() {
+//    var message = {
+//        roomid: document.getElementById('roomid').value,
+//        nickname: document.getElementById('nickname').value,
+//        text: document.getElementById('texto').value
+//    };
+    mensaje=document.getElementById('texto').value;
+    socket.emit('new-message', mensaje);
+    
+    document.getElementById('texto').value = "";
+    document.getElementById('texto').focus();
+    return false;
 }
 

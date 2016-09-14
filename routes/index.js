@@ -42,6 +42,7 @@ router.get('/', function (req, res, next) {
       roomid: "Habitación"
       // title: projecte +" " + version
     });
+    next();
 });
 
 router.get('/room', isAuthenticated, function (req, res, next) {
