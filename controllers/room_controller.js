@@ -12,6 +12,7 @@ module.exports = {
       fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
       nickname: req.session.nickname,
       roomid: req.session.roomid,
+      color: req.session.color,
       projecte: projecte
     });
   }

@@ -123,6 +123,7 @@ io.on('connection', function (socket) {
         //Mantenmos la session socket con el usuario ... 
         socket.nickname = data.nickname.toLowerCase(); //esto .. no funciona¿?
         socket.roomid = data.roomid.toLowerCase();
+        socket.color = data.color.toLowerCase();
         socket.lat = 0;
         socket.lng = 0;
         socket.time = 0;
@@ -148,8 +149,8 @@ io.on('connection', function (socket) {
         //un usuario Actualiza SU posición
         mensaje = "mensaje-server: " + socket.nickname + ". lat: " + lat + ", lng: " + lng;
         socketlog(socket, mensaje);
-        io.sockets.in(socket.roomid).emit('messages', socket.nickname, "update position");
-        io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng);
+//        io.sockets.in(socket.roomid).emit('messages', socket.nickname, "update position");
+        io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng, socket.color);
     });
     //Rebem la nova posició del usuaris d'un usuari i actualitzem 
     //la posició de la resta d'usuaris

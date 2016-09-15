@@ -21,6 +21,7 @@ router.post('/login', function (req, res, next) {
   //Guardo el nickname y roomid en session
   req.session.nickname = req.body.nickname.toLowerCase();
   req.session.roomid = req.body.roomid.toLowerCase();
+  req.session.color = req.body.color.toLowerCase();
 
   //Si todo es OK.. vamos a la room
   res.redirect("/room");

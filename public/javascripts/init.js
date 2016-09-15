@@ -10,6 +10,7 @@
 var yo;
 var nickname = document.getElementById("nickname").value.toLowerCase();
 var roomid = document.getElementById("roomid").value.toLowerCase();
+var color = document.getElementById("color").value.toLowerCase();
 var socket = io.connect();
 
 
@@ -17,12 +18,12 @@ var socket = io.connect();
 $(document).ready(function () {
 
     //Inicio de emision
-    socket.emit("new-user", {nickname: nickname, roomid: roomid}, function (data) {
+    socket.emit("new-user", {nickname: nickname, roomid: roomid, color: color}, function (data) {
         socket.emit("user-join", data);
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
 
-    setInterval('emitimosPosicion()', 5000);
+    setInterval('emitimosPosicion()', 10000);
     $('.button-collapse').sideNav({'edge': 'left'});
 });
 

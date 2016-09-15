@@ -5,12 +5,15 @@ block content
       .card.blue.darken-1
         .card-content.white-text
           form(name="form_entrada", method="post", action="login")
-              legend Where Are We
-              input.input-field(type="text",name="nickname",placeholder="#{nickname}")
+                legend Where Are We
+                input.input-field(type="text",name="nickname",placeholder="#{nickname}")
 
-              br
-              input.input-field(type="text",name="roomid",placeholder="#{roomid}")
+                br
+                input.input-field(type="text",name="roomid",placeholder="#{roomid}")
 
-              br
-              
-              button.btn.waves-effect.waves-light(type="submit") #{fraseboton}
+                br
+                input.input-field(type="text",name="color",placeholder="color")
+
+                p hola
+                br
+                button.btn.waves-effect.waves-light(type="submit") #{fraseboton}
