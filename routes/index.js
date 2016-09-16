@@ -1,10 +1,27 @@
 var express = require('express');
 var router = express.Router();
-const version="1.4";
-   
+var fs = require("fs");
+var version = "1.0";
+
+
+fs.readFile('./VERSION', 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+    version = data;
+})
+
 
 //MiddleWare de autenticación
 function isAuthenticated(req, res, next) {
+    console.log("DANIIIIIIIIII+--1");
+    console.log(req.params.habitacion.toLowerCase());
+    console.log("DANIIIIIIIIII ---2");
+    console.log(req.session.roomid);
+    console.log("DANIIIIIIIIII ---3");
+    req.session.roomid = req.params.habitacion.toLowerCase();
+//     req.session.roomid = req.params.habitacion.toLowerCase();
+     
     // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
     if (req.session.nickname)
         return next();
@@ -14,38 +31,48 @@ function isAuthenticated(req, res, next) {
 
 
 router.post('/login', function (req, res, next) {
-  //Guardo el nickname y roomid en session
-  req.session.nickname = req.body.nickname.toLowerCase();
-  req.session.roomid = req.body.roomid.toLowerCase();
-  req.session.color = req.body.color.toLowerCase();
+    //Guardo el nickname y roomid en session
+    req.session.nickname = req.body.nickname.toLowerCase();
+    req.session.roomid = req.body.roomid.toLowerCase();
+    req.session.color = req.body.color.toLowerCase();
 
-  //Si todo es OK.. vamos a la room
-  res.redirect("/room");
+    //Si todo es OK.. vamos a la room
+    res.redirect("/room/"+req.session.roomid);
 
 });
 
 router.get('/logout', function (req, res, next) {
-  req.session.destroy();
-  res.redirect("/");
+    req.session.destroy();
+    res.redirect("/");
 });
 
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //Renderizamos la VISTA
+    
     res.render('login', {
-      fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
-      nickname: "Pon un nick",
-      roomid: "Habitación",
-      version: version
-      // title: projecte +" " + version
+        fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
+        color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+        nickname: "Pon un nick",
+        roomid: req.session.roomid || "Habitación",
+        version: version
+                // title: projecte +" " + version
     });
     next();
 });
 
-router.get('/room', isAuthenticated, function (req, res, next) {
-  var controller=require("../controllers/room_controller");
-  controller.init(res,req);
+//router.get('/room/:habitacio', null, function (req, res, next) {
+//    res.redirect("/");
+//});
+//router.get('/room/', isAuthenticated, function (req, res, next) {
+//    var controller = require("../controllers/room_controller");
+//    controller.init(res, req);
+//});
+router.get('/room/:habitacion', isAuthenticated,  function (req, res, next) {
+    
+    var controller = require("../controllers/room_controller");
+    controller.init(res, req);
 });
 
 module.exports = router;

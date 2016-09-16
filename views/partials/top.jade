@@ -1,14 +1,20 @@
 .section.light-blue.lighten-1#index-banner
   .container
     .nav-wrapper
-        a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
-          i.material-icons menu
-        span  nick: <b>#{nickname}</b>.  roomid: <b>#{roomid}</b>
-        div#output
-        div(style="display:none")
-          input(type="type",id="roomid", value="#{roomid}")
-          input(type="type",id="nickname", value="#{nickname}")
-          input(type="type",id="lat", value="#{lat}")
-          input(type="type",id="lng", value="#{lng}")
-          input(type="type",id="color", value="#{color}")
+        .row
+            a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
+              i.material-icons menu
+            span  nick: <b>#{nickname}</b>.  roomid: <b>#{roomid}</b>
+            if nickname
+                a(href="/logout",style="display:inline")  
+                    i.material-icons launch
+            button#btnBound.btn-flat.waves-effect.waves-light(type="button",onclick="encuadrarMapa()") Encuadre
+             
+            div#output
+            div(style="display:none")
+              input(type="hidden",id="roomid", value="#{roomid}")
+              input(type="hidden",id="nickname", value="#{nickname}")
+              input(type="type",id="lat", value="#{lat}")
+              input(type="type",id="lng", value="#{lng}")
+              input(type="hidden",id="color", value="#{color}")
       

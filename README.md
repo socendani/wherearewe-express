@@ -1,9 +1,22 @@
 # wherearewe-express
 Where Are We (NodeJS - Express -SocketIO)
 
-#Sin base de datos
-Para evitar bases de datos pero tener multicanal, realizaremos
-un sistema de evento unitario, donde cada vez que haya una
-actualización de coordenadas se emita ese dato a los registrados
-en ese canal, de tal manera que sea el cliente quien pinte los movimientos
-de cada usuario de forma unitaria.
+##Learn
+Práctica a título personal de MEAN Stack
+
+##Tecnologias
+Para esta práctica se ha utilizado.
+. NodeJS
+. ExpressJS
+. Socket.io
+. Jade Template
+. MaterializeCSS
+. bower y gulp
+
+
+
+##Sin base de datos
+El primer objetivo era realizar un sistema en tiempo real muy simple pero efímero. No se utiliza
+base de datos alguna ni acumulación de mensajes en variables, al mismo tiempo mantener multiples 
+Rooms sin solapamiento de mensajes ni coordenadas.
+

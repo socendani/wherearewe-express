@@ -1,20 +1,20 @@
 extends layout/login
 block content
-  .row(style="margin-top:10%")
-    .col.s12.m6
+  .row(style="margin-top:5%")
+    .col.s6.center(style="margin:0 auto;")
       .card.blue.darken-1
         .card-content.white-text
           form(name="form_entrada", method="post", action="login",autocomplete="off")
                 h4(style="display:inline") Where Are We 
                 span v.#{version}
-                input.input-field(type="text",name="nickname",placeholder="#{nickname}",autocomplete="off")
+                input.input-field(type="text",name="nickname",placeholder="#{nickname}",autocomplete="off",autofocus)
 
                 br
-                input.input-field(type="text",name="roomid",placeholder="#{roomid}",autocomplete="off")
+                input.input-field(type="text",name="roomid",value="#{roomid}",placeholder="#{roomid}",autocomplete="off")
 
                 br
-                label Escoge un color&nbsp;&nbsp;&nbsp;&nbsp;
-                input(type="color",name="color",value="#ff00ff",style="padding:0px;border-width:0px")
+                p Escoge un color&nbsp;&nbsp;&nbsp;&nbsp;
+                input(type="color",name="color",value="#{color}",style="padding:0px;border-width:0px")
                 
                 br
                 br

@@ -14,7 +14,7 @@ var roomid = document.getElementById("roomid").value.toLowerCase();
 var color = document.getElementById("color").value.toLowerCase();
 var op = document.getElementById("output");
 var socket = io.connect();
-var bFirstPosition=false;
+var is_FirstPosition = true;
 
 function get_pos() {
     if (!!navigator.geolocation) {
@@ -27,9 +27,10 @@ function get_pos() {
 
 function geo_success(position) {
     emitimosPosicion(position.coords.latitude, position.coords.longitude);
-    if (!bFirstPosition) {
+    if (is_FirstPosition) {
         initMap(position.coords.latitude, position.coords.longitude);
-        bFirstPosition=true;
+//        emitimosPosicion(position.coords.latitude, position.coords.longitude);
+        is_FirstPosition = false;
     }
 }
 
@@ -70,7 +71,10 @@ $(document).ready(function () {
         socket.emit("user-join", data);
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
-//    setInterval('emitimosPosicion()', 10000);
+    
+    setInterval('emitimosPosicion()', 10000);
     $('.button-collapse').sideNav({'edge': 'left'});
+    
+   
 });
 

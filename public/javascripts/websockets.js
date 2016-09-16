@@ -2,7 +2,7 @@
 /**********  Client Socket Receipt Functions ********/
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
-    console.log("messages-cli: "+usuario+" - "+mensaje);
+//    console.log("messages-cli: " + usuario + " - " + mensaje);
     actualizarChat(usuario, mensaje);
 })
 
@@ -11,10 +11,9 @@ socket.on('messages', function (usuario, mensaje) {
 //    actualizarMapa(data);
 //})
 
-socket.on('posicion', function (usuario, lat, lng, color) {
-    console.log("messages-cli: "+usuario+". lang: "+lat+", lng: "+lng+", color: "+color);
-//    actualizarChat(usuario, "messages-cli: "+usuario+". lang: "+lat+", lng: "+lng);  //temporalmente
-    actualizarMarker(usuario, lat, lng, color);
+socket.on('posicion', function (nickname, lat, lng, color) {
+//    console.log("messages-cli: " + nickname + ". lang: " + lat + ", lng: " + lng + ", color: " + color);
+    actualizarMapa(nickname, lat, lng, color);
 })
 
 
@@ -53,9 +52,9 @@ function addMessage() {
 //        nickname: document.getElementById('nickname').value,
 //        text: document.getElementById('texto').value
 //    };
-    mensaje=document.getElementById('texto').value;
+    mensaje = document.getElementById('texto').value;
     socket.emit('new-message', mensaje);
-    
+
     document.getElementById('texto').value = "";
     document.getElementById('texto').focus();
     return false;

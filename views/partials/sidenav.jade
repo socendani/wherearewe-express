@@ -1,13 +1,8 @@
 .container
   div#nav-mobile.side-nav.fixed
     .row(style="margin:5px")
-      h3.header.center Where are We 
+      h5.header.center Where are We 
             
-      div.center (#{roomid})    
-        if nickname
-            a(href="/logout",style="display:inline")  
-                i.material-icons launch
-
       .card.light-blue.darken-3
         .card-content.black-text.center
           //- .row-fluid(style="margin:5px")
@@ -19,11 +14,8 @@
               button.btn.waves-effect.waves-light(type="submit") 
                 i.material-icons send
           
-    .row(style='margin:10px')
      
-
-      hr
-      .chat(name="messages", id="messages")
+    .chat(name="messages", id="messages",style='margin:10px')
 
 
   
