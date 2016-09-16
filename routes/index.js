@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const version="1.3";
+   
 
 //MiddleWare de autenticación
 function isAuthenticated(req, res, next) {
@@ -40,7 +42,8 @@ router.get('/', function (req, res, next) {
     res.render('login', {
       fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
       nickname: "Pon un nick",
-      roomid: "Habitación"
+      roomid: "Habitación",
+      version: version
       // title: projecte +" " + version
     });
     next();

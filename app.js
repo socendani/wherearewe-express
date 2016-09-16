@@ -110,14 +110,6 @@ io.on('connection', function (socket) {
         console.log("------ mensaje:" + mensaje);
         console.log("----------------------------------------------");
     }
-//    function socketlog_variables(socket) {
-//        mensaje = "usuarios de la Room (" + socket.roomid + ") ";
-//        console.log("*************************************");
-//        console.log(mensaje);
-//        console.log("*************************************");
-//        socket.emit('messages', "SYSTEM", mensaje);
-//    }
-
 
     socket.on('new-user', function (data, fn) {
         //Mantenmos la session socket con el usuario ... 
@@ -152,31 +144,6 @@ io.on('connection', function (socket) {
 //        io.sockets.in(socket.roomid).emit('messages', socket.nickname, "update position");
         io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng, socket.color);
     });
-    //Rebem la nova posició del usuaris d'un usuari i actualitzem 
-    //la posició de la resta d'usuaris
-//    socket.on('KKK_update-position', function (data) {
-//        return false;
-//        roomid = data.roomid;
-//        console.log("-- RoomID:" + data.roomid);
-//        console.log("-- Socket.roomid:" + socket.roomid);
-//        User.update(data);
-//        users_room = User.dameUsuarios(roomid);
-//        if (!users_room) {
-//            return false;
-//        }
-//        // console.log("usuarios=========================");
-//        total = Object.getOwnPropertyNames(users_room).length;
-//        console.log("usuarios habitación: (" + roomid + ") => " + total);
-//        // console.log("users_room_______________________________________________");
-//        // console.log(users_room);
-//
-//        //Noo podemos 'emitir' objetos, solo arrays.
-//        var numeric_array = [];
-//        for (var item in users_room) {
-//            numeric_array.push(users_room[item]);
-//        }
-//
-//        io.sockets.in(roomid).emit('usuarios', numeric_array);
-//    });
+   
 });
 module.exports = {app: app, server: server};

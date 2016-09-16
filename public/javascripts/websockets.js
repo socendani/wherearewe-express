@@ -1,18 +1,3 @@
-// console.log("1111111111111");
-// console.log("Servidor: " + dmr_servidor);
-
-
-
-// console.log("Room ID => " + roomid);
-// var dmr_servidor = "http://localhost:3000";
-// var socket = io.connect(dmr_servidor,  { 'forceNew': true });
-//var socket = io.connect();
-//Creamos y/o nos unimos
-//socket.emit('new-user', { nickname: nickname, roomid: roomid } );
-
-//Emitimos nuestra bienvenida
-//socket.emit('new-message', { nickname: nickname, roomid: roomid, text: nickname + " entrando en sala" });
-
 
 /**********  Client Socket Receipt Functions ********/
 //Pintar mensajes recibidos
@@ -22,9 +7,9 @@ socket.on('messages', function (usuario, mensaje) {
 })
 
 //Pintar usuarios en el mapa
-socket.on('usuarios', function (data) {
-    actualizarMapa(data);
-})
+//socket.on('usuarios', function (data) {
+//    actualizarMapa(data);
+//})
 
 socket.on('posicion', function (usuario, lat, lng, color) {
     console.log("messages-cli: "+usuario+". lang: "+lat+", lng: "+lng+", color: "+color);

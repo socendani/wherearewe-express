@@ -4,17 +4,17 @@
       h3.header.center Where are We 
             
       div.center (#{roomid})    
-        if nickname 
+        if nickname
             a(href="/logout",style="display:inline")  
                 i.material-icons launch
 
       .card.light-blue.darken-3
         .card-content.black-text.center
           //- .row-fluid(style="margin:5px")
-          form(method='post',onsubmit="return addMessage(this)")
-              input(type="hidden",name="roomid",id="roomid",value="#{roomid}")
-              input(type="hidden",name="nickname",id="nickname",value="#{nickname}")
-              input.input-field(type="text",name="texto",id="texto",placeholder="Chat..")
+          form(method='post',onsubmit="return addMessage(this)",autocomplete="off")
+              input(type="hidden",name="roomid",id="roomid",value="#{roomid}",autocomplete="off")
+              input(type="hidden",name="nickname",id="nickname",value="#{nickname}",autocomplete="off")
+              input.input-field(type="text",name="texto",id="texto",placeholder="Chat..",autocomplete="off")
 
               button.btn.waves-effect.waves-light(type="submit") 
                 i.material-icons send

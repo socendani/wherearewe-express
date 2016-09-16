@@ -8,56 +8,34 @@
 
 /************** GLOBALES ****************/
 var yo;
+var wpid;
 var nickname = document.getElementById("nickname").value.toLowerCase();
 var roomid = document.getElementById("roomid").value.toLowerCase();
 var color = document.getElementById("color").value.toLowerCase();
+var op = document.getElementById("output");
 var socket = io.connect();
+var bFirstPosition=false;
 
+function get_pos() {
+    if (!!navigator.geolocation) {
+        wpid = navigator.geolocation.watchPosition(geo_success, geo_error, {enableHighAccuracy: true, maximumAge: 30000, timeout: 27000});
+    } else {
+        op.innerHTML = "ERROR: Your Browser doesnt support the Geo Location API";
+    }
+}
+//Usamos wathPosition en vez de getCurrentPosition
 
-
-$(document).ready(function () {
-
-    //Inicio de emision
-    socket.emit("new-user", {nickname: nickname, roomid: roomid, color: color}, function (data) {
-        socket.emit("user-join", data);
-    });
-//    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
-
-    setInterval('emitimosPosicion()', 10000);
-    $('.button-collapse').sideNav({'edge': 'left'});
-});
-
-
-//Aquesta funció s'executa onload del body una vegada estem LOGINATS
-function init() {
-
-    var options = {
-        enableHighAccuracy: true,
-        timeout: 5000,
-        maximumAge: 0
-    };
-    navigator.geolocation.getCurrentPosition(initMap, initShowError, options);
-//    var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-//    if (navigator.geolocation) {
-//        if (isChrome) //set this var looking for Chrome un user-agent header
-//            options = {enableHighAccuracy: false, maximumAge: 15000, timeout: 30000};
-//        else
-//            // options = { maximumAge: Infinity, timeout: 0 };
-//            options = {enableHighAccuracy: false, maximumAge: 15000, timeout: 30000};
-//        
-//    }
-
-
-
-
-
+function geo_success(position) {
+    emitimosPosicion(position.coords.latitude, position.coords.longitude);
+    if (!bFirstPosition) {
+        initMap(position.coords.latitude, position.coords.longitude);
+        bFirstPosition=true;
+    }
 }
 
 
 
-
-function initShowError(error) {
-    // alerta.style.display = "block"
+function geo_error(error) {
     var msg;
     switch (error.code) {
         case error.PERMISSION_DENIED:
@@ -73,7 +51,26 @@ function initShowError(error) {
             msg = "Ocurrio un error desconocido.";
             break;
     }
-    consol.error(msg);
-    // par.innerHTML = msg;
+    op.innerHTML = msg;
 }
+
+
+
+//Aquesta funció s'executa onload del body una vegada estem LOGINATS
+function init() {
+    get_pos();
+
+}
+
+
+
+$(document).ready(function () {
+//Inicio de emision
+    socket.emit("new-user", {nickname: nickname, roomid: roomid, color: color}, function (data) {
+        socket.emit("user-join", data);
+    });
+//    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
+//    setInterval('emitimosPosicion()', 10000);
+    $('.button-collapse').sideNav({'edge': 'left'});
+});
 
