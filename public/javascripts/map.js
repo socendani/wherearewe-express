@@ -11,7 +11,7 @@ var lat, lng;
 var color;
 var markers = {};
 
-function initMap(lat,lng) {
+function initMap(lat, lng) {
 //    nickname = document.getElementById("nickname").value;
     var myCenter = new google.maps.LatLng(lat, lng);
     var mapOptions = {
@@ -42,19 +42,21 @@ function addMarker(nickname, lat, lng, color, map) {
 
     var marker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
-         label: nickname.charAt(0).toUpperCase(),
+        label: nickname.charAt(0).toUpperCase(),
         title: nickname,
+        draggable:true,
         icon: pinSymbol(color),
         map: map
     });
-    
+
     console.log("Add_marker: " + nickname + ". lang: " + lat + ", lng: " + lng);
 //    console.log(marker);
     google.maps.event.addListener(marker, 'dragend', function (event) {
         document.getElementById('lat').value = event.latLng.lat();
         document.getElementById('lng').value = event.latLng.lng();
+        actualizarMarker(nickname, event.latLng.lat(), event.latLng.lng(), color)
     });
-    
+
     marker.setMap(map);
 
     markers.nickname = {nickname: nickname, lat: lat, lng: lng, color: color};
@@ -64,15 +66,18 @@ function addMarker(nickname, lat, lng, color, map) {
 function actualizarMarker(nickname, lat, lng, color) {
 
 //    console.log("messages-cli: " + nickname + ". lang: " + lat + ", lng: " + lng + ", color: " + color);
-//    console.info(markers);
-//    console.info(markers[nickname]);
+    console.info("11111111");
+    console.info(markers.nickname);
     //Borramos el MARKER
 //    markers[nickname] = {};
-//    delete markers.nickname;
     markers.nickname = undefined;
+    delete markers.nickname;
     //Lo añadimos al mapa
-    addMarker(nickname, parseFloat(lat), parseFloat(lng), color, map);
+    
+     console.info("2222222");
+    console.info(markers.nickname);
     //Lo añadimos al mapa en la nueva posicion
+    addMarker(nickname, parseFloat(lat), parseFloat(lng), color, map);
 
     // var bounds = new google.maps.LatLngBounds();
 
@@ -106,12 +111,13 @@ function deleteMarkers() {
 //http://maps.google.com/mapfiles/ms/icons/blue.png
 function pinSymbol(color) {
     return {
-        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+//        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+        path: google.maps.SymbolPath.CIRCLE,
         fillColor: color,
         fillOpacity: 1,
         strokeColor: '#000',
-        strokeWeight: 2,
-        scale: 1
+        strokeWeight: 1,
+        scale: 10
     };
 }
 //var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
