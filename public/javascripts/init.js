@@ -72,7 +72,7 @@ $(document).ready(function () {
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
     
-    setInterval('emitimosPosicion()', 10000);
+    setInterval('emitimosPosicion()', 50000);
     $('.button-collapse').sideNav({'edge': 'left'});
     
    
