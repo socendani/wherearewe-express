@@ -131,7 +131,7 @@ io.on('connection', function (socket) {
     });
     //Nou missatge
     socket.on('new-message', function (mensaje) {
-        socketlog(socket, mensaje);
+//        socketlog(socket, mensaje);
 //        roomid = data.roomid;
         // messages.push(data);
         // io.sockets.emit('messages', messages);

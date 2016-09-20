@@ -21,7 +21,7 @@ function isAuthenticated(req, res, next) {
     console.log("DANIIIIIIIIII ---3");
     req.session.roomid = req.params.habitacion.toLowerCase();
 //     req.session.roomid = req.params.habitacion.toLowerCase();
-     
+
     // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
     if (req.session.nickname)
         return next();
@@ -32,12 +32,15 @@ function isAuthenticated(req, res, next) {
 
 router.post('/login', function (req, res, next) {
     //Guardo el nickname y roomid en session
+//    var escaped_str = require('querystring').escape('Photo on 30-11-12 at 8.09 AM #2.jpg');
+//    console.log(escaped_str);
+
     req.session.nickname = req.body.nickname.toLowerCase();
-    req.session.roomid = req.body.roomid.toLowerCase();
+    req.session.roomid = require('querystring').escape(req.body.roomid.toLowerCase());
     req.session.color = req.body.color.toLowerCase();
 
     //Si todo es OK.. vamos a la room
-    res.redirect("/room/"+req.session.roomid);
+    res.redirect("/room/" + req.session.roomid);
 
 });
 
@@ -50,7 +53,7 @@ router.get('/logout', function (req, res, next) {
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //Renderizamos la VISTA
-    
+
     res.render('login', {
         fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
         color: '#' + Math.floor(Math.random() * 16777215).toString(16),
@@ -69,8 +72,8 @@ router.get('/', function (req, res, next) {
 //    var controller = require("../controllers/room_controller");
 //    controller.init(res, req);
 //});
-router.get('/room/:habitacion', isAuthenticated,  function (req, res, next) {
-    
+router.get('/room/:habitacion', isAuthenticated, function (req, res, next) {
+
     var controller = require("../controllers/room_controller");
     controller.init(res, req);
 });
