@@ -96,10 +96,16 @@ app.use(function (err, req, res, next) {
 
 //var messages = [];
 var users = [];
+var usuarios = {};
+var aplicacion = {};
+
 //var User = require("./models/users.js").User;
 io.on('connection', function (socket) {
-    socket.on('disconnect', function () {
+
+    socket.on('user-left', function (socket) {
         console.log('user disconnected');
+        mensaje = socket.nickname + " saliendo de mapa (" + socket.roomid + ")";
+        socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
     });
 
     function socketlog(socket, mensaje) {
@@ -120,6 +126,9 @@ io.on('connection', function (socket) {
 //        console.log(e.nickname);
 //    })
     socket.on('new-user', function (data, fn) {
+//        if (addedUser)
+//            return;
+//        
         //Mantenmos la session socket con el usuario ... 
         socket.nickname = data.nickname.toLowerCase(); //esto .. no funciona¿?
         socket.roomid = data.roomid.toLowerCase();
@@ -128,8 +137,18 @@ io.on('connection', function (socket) {
         socket.lng = 0;
         socket.time = 0;
         socket.join(socket.roomid); //join al ROOMID
-
-
+        var hoy = new Date().toLocaleTimeString();
+        var roomid = socket.roomid;
+        var usuario = {nickname: socket.nickname, color: socket.color, time: hoy};
+        if (!aplicacion[roomid]) {
+            var room = {
+                "usuarios": [],
+                "total": 0
+            }
+            Object.defineProperty(aplicacion, roomid, {value: room, writable: true, enumerable: true});
+        }
+        aplicacion[roomid].usuarios.push(usuario);
+        aplicacion[roomid].total = aplicacion[roomid].total + 1;
 //        console.log(Object.keys(socket.adapter.rooms[socket.roomid]));
 //        var clients = findClientsSocket(socket.roomid);
 //        console.log(clients);
@@ -138,17 +157,19 @@ io.on('connection', function (socket) {
         //Callback client
         fn({data: "ejemplo de uso de callback en socket.io"});
     });
+
+
     socket.on('user-join', function (data) {
-        mensaje = socket.nickname + " entrando en sala (" + socket.roomid + ")";
+        mensaje = socket.nickname + " entrando en mapa (" + socket.roomid + ")";
         socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-        kk = io.sockets.connected;
-        console.log("**************************");
-        console.log(io.sockets.in(socket.roomid));
-        console.log(io.sockets.adapter.rooms[socket.roomid]);
-        console.log("---------------------------------");
-        for(var item in kk){
-            console.log (item.id);
-        }
+//        kk = io.sockets.connected;
+//        console.log("**************************");
+//        console.log(io.sockets.in(socket.roomid));
+//        console.log(io.sockets.adapter.rooms[socket.roomid]);
+//        console.log("---------------------------------");
+//        for(var item in kk){
+////            console.log (item.id);
+//        }
 //        console.log(io.sockets.sockets.clients());
     });
     //Nou missatge
@@ -162,10 +183,14 @@ io.on('connection', function (socket) {
     socket.on('update-position', function (lat, lng) {
         //un usuario Actualiza SU posición
 //        mensaje = "mensaje-server: " + socket.nickname + ". lat: " + lat + ", lng: " + lng;
-//        socketlog(socket, mensaje);
-//        io.sockets.in(socket.roomid).emit('messages', socket.nickname, "update position");
+//        console.log(mensaje);
+        if (socket.roomid !== undefined) {
+            io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
+        }
+//        console.log(aplicacion);
         io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng, socket.color);
     });
+
 
 
 

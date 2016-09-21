@@ -1,3 +1,4 @@
+
 .section.light-blue.lighten-1#index-banner(style="padding:2px")
   .container
     .nav-wrapper
@@ -6,16 +7,24 @@
               i.material-icons menu
             span  WAW:<b>#{nickname} (<b>#{roomid}</b>)</b>&nbsp;&nbsp;
             if nickname
-                a.btn.waves-effect.waves-light(href="/logout",title="Salir")  
-                    i.material-icons launch
                 a#btnBound.btn.waves-effect.waves-light(onclick="encuadrarMapa()",title="Encuadrar") 
                     i.material-icons my_location
             div(style="display:inline;")
-                i#iconsender.material-icons(style="padding-top:10px;float:right") settings_input_antenna
-            div(style="display:xnone")
+                a.right-align(style="color:white;padding-top:10px;float:right;right:10px",href="/logout",title="Salir")
+                     i.material-icons settings_power
+                a.right-align.modal-trigger(style="color:white;padding-top:10px;float:right;right:10px",href="#modal1",title="Info")
+                    i.material-icons info
+                i#iconsender.material-icons(style="padding-top:10px;float:right;padding-right:10px") settings_input_antenna
+            div(style="display:none")
               input(type="hidden",id="roomid", value="#{roomid}")
               input(type="hidden",id="nickname", value="#{nickname}")
               input(type="text",id="lat", value="#{lat}")
               input(type="text",id="lng", value="#{lng}")
-              input(type="hidden",id="color", value="#{color}")
-      
+              input(type="hidden",id="color", value="#{color}")      
+
+#modal1.modal
+    .modal-content
+        h4 Info
+        p Lorem Ipsum
+    .modal-footer
+        a.modal-action.modal-close(href="#!")

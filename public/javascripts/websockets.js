@@ -7,13 +7,24 @@ socket.on('messages', function (usuario, mensaje) {
     actualizarChat(usuario, mensaje);
 })
 
-//Pintar usuarios en el mapa
-socket.on('usuarios', function (data) {
-    Materialize.toast(data, 4000);
+//Pintar usuarios 
+socket.on('usuarios', function (usuarios, total) {
+    var html = usuarios.map(function (obj, index) {
+        chat_user = "chat-user";
+        if (nickname == obj.nickname) {
+            chat_user = "chat-user-me";
+        }
+//        console.log("usaurio => " + obj.nickname + "=" + obj.color);
+        return ('<div  class="' + chat_user + '"><b>' + obj.nickname + '</b></div>');
+    }).join(" ");
+    document.getElementById('usuarios').innerHTML = "<div><b>Usuarios en mapa: " + total + "</b></div>" + html;
+//    console.log(usuarios);
 })
 
 socket.on('posicion', function (nickname, lat, lng, color) {
-//    console.log("messages-cli: " + nickname + ". lang: " + lat + ", lng: " + lng + ", color: " + color);
+    var msg = "messages-cli: " + nickname + ". lang: " + lat + ", lng: " + lng + ", color: " + color;
+    Materialize.toast(msg, 2000);
+//    console.log();
     showIconSender();
     actualizarMapa(nickname, lat, lng, color);
 })
@@ -25,7 +36,7 @@ socket.on('posicion', function (nickname, lat, lng, color) {
 
 function showIconSender() {
     $("#iconsender").show();
-    setTimeout( $("#iconsender").hide(),5000);
+    setTimeout($("#iconsender").hide(), 5000);
 }
 function actualizarUsuarios(usuario, mensaje) {
 //    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);

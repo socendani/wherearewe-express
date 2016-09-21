@@ -19,7 +19,7 @@ function get_pos() {
     if (!!navigator.geolocation) {
         wpid = navigator.geolocation.watchPosition(geo_success, geo_error, {enableHighAccuracy: true, maximumAge: 30000, timeout: 27000});
     } else {
-        Materialize.toast("ERROR: Your Browser doesnt support the Geo Location API", 4000)
+        Materialize.toast("ERROR: Your Browser doesnt support the Geo Location API", 4000);
     }
 }
 //Usamos wathPosition en vez de getCurrentPosition

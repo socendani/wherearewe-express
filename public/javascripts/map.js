@@ -35,19 +35,15 @@ function addMarker(nickname, lat, lng, color, map) {
     if (!lat)
         return false;
     console.log("Add_marker: " + nickname + ". lang: " + lat + ", lng: " + lng);
-    if (document.getElementById("nickname").value == nickname) {
-        is_me = true;
-    } else {
-        is_me = false;
-    }
+    is_me=(document.getElementById("nickname").value == nickname)?true:false;
     var infowindow = new google.maps.InfoWindow({
-          content: "<b></b>"+nickname+"<br><b>Lat: </b>"+lat+"<br><b>Long: </b>"+lng+"<br>"
-        });
+        content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
+    });
     var marker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
         label: nickname.charAt(0).toUpperCase(),
         title: nickname,
-//        draggable: true,
+        draggable: true,
         icon: pinSymbol(color, is_me),
         map: map
     });
@@ -60,11 +56,14 @@ function addMarker(nickname, lat, lng, color, map) {
     marker.color = color;
 
 //    console.log(marker);
-//    google.maps.event.addListener(marker, 'dragend', function (event) {
-//        document.getElementById('lat').value = event.latLng.lat();
-//        document.getElementById('lng').value = event.latLng.lng();
-//        actualizarMapa(nickname, event.latLng.lat(), event.latLng.lng(), color);
-//    });
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+        document.getElementById('lat').value = event.latLng.lat();
+        document.getElementById('lng').value = event.latLng.lng();
+        actualizarMapa(nickname, event.latLng.lat(), event.latLng.lng(), color);
+        emitimosPosicion(); 
+    });
+
+
     //Marker al MAPA
     marker.setMap(map);
 //    markers.push({nickname: nickname, lat: lat, lng: lng, color: color});
@@ -79,12 +78,13 @@ function encuadrarMapa() {
     }
     map.setCenter(bounds.getCenter()); //or use custom center
     map.fitBounds(bounds);
-    if (map.getZoom() > 15) {
-        map.setZoom(15);
+//    map.setZoom(20);
+    if (map.getZoom() > 19) {
+        map.setZoom(19);
     }
 }
 
-function deleteMarker(index, callback) {
+function ALLLLL___deleteMarker(index, callback) {
 //    console.log(JSON.stringify(markers[index]));
 
 //    var tempArray = markers; // Create a temporary array
@@ -100,6 +100,43 @@ function deleteMarker(index, callback) {
     //Callback function WITH paràmetres!
     callback(nickname, parseFloat(lat), parseFloat(lng), color, map);
 }
+
+
+
+function deleteMarker(nickname, callback) {
+    console.log("MARKERSSSSSSSSSSSSSSSS -1");
+    console.log(markers);
+    console.log(markers.length);
+//    console.log(markers[0].nickname);
+//    markers[0].setMap(null);
+    console.log("MARKERSSSSSSCSSSSSSSSSS -2");
+    for (var i = 0; i < markers.length; i++) {
+        console.log("nickname: " + nickname + " => marker_nickname:" + markers[i].nickname);
+        if (nickname == markers[i].nickname) {
+            console.log("Eliminando exclusivamente: " + i + "(" + markers[i].nickname + ")");
+            markers[i].setMap(null);  //del MAPA
+            markers.splice(i, 1);  //del ARRAY
+        }
+    }
+    //Callback function WITH paràmetres!
+    callback(nickname, parseFloat(lat), parseFloat(lng), color, map);
+
+//
+////    var tempArray = markers; // Create a temporary array
+//    for (var i = 0; i < markers.length; i++) {
+////        console.log(markers[i].id);
+//        markers[i].setMap(null);
+//        if (index == markers[i].id) {
+////            console.log("Eliminando: " + i + "(" + markers[i].id + ")");
+//            markers.splice(i, 1);
+//        }
+//    }
+//
+//    //Callback function WITH paràmetres!
+//    callback(nickname, parseFloat(lat), parseFloat(lng), color, map);
+}
+
+
 
 function actualizarMapa(nickname, lat, lng, color) {
     deleteMarker(nickname, function () {

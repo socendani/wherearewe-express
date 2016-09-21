@@ -1,18 +1,23 @@
 /* DMR-START: Para el STICKY FOOTER !!! */
 /* DMR-END: Para el STICKY FOOTER !!! */
 /*********** ..dddMAP *************/
+main {
+  min-height: 600px; }
+
 #map {
   min-height: 80vh;
+  /*min-height:600px;*/
   width: 100%; }
 
 #messages div {
   font-size: 80%; }
-
 #messages .chat-user {
   color: green; }
-
 #messages .chat-user-me {
   color: red; }
+
+.gm-style {
+  min-height: 600px; }
 
 /************ RESPONSIVE  ********/
 header, main, footer {
@@ -21,15 +26,14 @@ header, main, footer {
 @media screen and (min-width: 992px) {
   header, main, footer {
     padding-left: 200px; } }
-
 @media screen and (min-width: 1201px) {
   header, main, footer {
     padding-left: 120px; } }
-
-
-#toast-container {
+/*#toast-container {
   top: auto !important;
   right: auto !important;
-  bottom: 10%;
-  right:7%;
-}
+  top: 30%;
+  margin:0 auto;
+}*/
+
+/*# sourceMappingURL=project.css.map */

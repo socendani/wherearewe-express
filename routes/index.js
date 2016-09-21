@@ -14,14 +14,8 @@ fs.readFile('./VERSION', 'utf8', function (err, data) {
 
 //MiddleWare de autenticación
 function isAuthenticated(req, res, next) {
-    console.log("DANIIIIIIIIII+--1");
-    console.log(req.params.habitacion.toLowerCase());
-    console.log("DANIIIIIIIIII ---2");
-    console.log(req.session.roomid);
-    console.log("DANIIIIIIIIII ---3");
-    req.session.roomid = req.params.habitacion.toLowerCase();
-//     req.session.roomid = req.params.habitacion.toLowerCase();
-
+//    req.session.roomid =  require('querystring').escape(req.params.habitacion.toLowerCase());
+    req.session.roomid =  req.params.habitacion.toLowerCase();
     // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
     if (req.session.nickname)
         return next();
@@ -58,11 +52,11 @@ router.get('/', function (req, res, next) {
         fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
         color: '#' + Math.floor(Math.random() * 16777215).toString(16),
         nickname: "Pon un nick",
-        roomid: req.session.roomid || "Habitación",
+        roomid: req.session.roomid || "hab1",
         version: version
                 // title: projecte +" " + version
     });
-    next();
+//    next();
 });
 
 //router.get('/room/:habitacio', null, function (req, res, next) {
@@ -76,6 +70,7 @@ router.get('/room/:habitacion', isAuthenticated, function (req, res, next) {
 
     var controller = require("../controllers/room_controller");
     controller.init(res, req);
+//    next();
 });
 
 module.exports = router;

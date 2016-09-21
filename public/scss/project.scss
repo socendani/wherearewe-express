@@ -23,12 +23,12 @@ $break-extralarge:1201px;
 /*********** ..dddMAP *************/
 
 main {
-  min-height:1500px;
+  min-height:600px;
 }
 #map {
-  // min-height:80vh;
+ min-height:80vh;
   // min-height:130vh;
-  min-height:1500px;
+  /*min-height:600px;*/
   // height:100%;
   width:100%
 }
@@ -46,7 +46,7 @@ main {
 }
 
 .gm-style {
-  min-height:1500px;
+  min-height:600px;
 }
 
 /************ RESPONSIVE  ********/
@@ -63,10 +63,10 @@ header, main, footer {padding-left:0}
 // @media (min-height: 40.125em) {
 
   
-#toast-container {
+/*#toast-container {
   top: auto !important;
   right: auto !important;
-  bottom: 10%;
-  right:7%;
-}
+  top: 30%;
+  margin:0 auto;
+}*/
 
