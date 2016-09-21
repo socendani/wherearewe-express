@@ -12,6 +12,7 @@ function initMap(lat, lng) {
     };
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
     addMarker(nickname, lat, lng, color, map);
+//    emitimosPosicion(lat, lng);
 }
 
 
@@ -19,11 +20,14 @@ function initMap(lat, lng) {
 
 
 function emitimosPosicion(lat, lng) {
-    if (lat == null)
+    if ((lat == null) || (lat === undefined))
         lat = document.getElementById("lat").value;
-    if (lng == null)
+    if ((lng == null) || (lng === undefined))
         lng = document.getElementById("lng").value;
-    console.log("emitimos nueva posicion: " + lat + "," + lng);
+    if (lat == "undefined")
+        return false;
+
+    console.log("(emitimosPosicion) nueva posicion: " + lat + "," + lng + " [" + document.getElementById("nickname").value + "]");
     socket.emit('update-position', lat, lng);
     document.getElementById("lat").value = lat;
     document.getElementById("lng").value = lng;
@@ -34,11 +38,12 @@ function emitimosPosicion(lat, lng) {
 function addMarker(nickname, lat, lng, color, map) {
     if (!lat)
         return false;
-    console.log("Add_marker: " + nickname + ". lang: " + lat + ", lng: " + lng);
-    is_me=(document.getElementById("nickname").value == nickname)?true:false;
+    console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
+    is_me = (document.getElementById("nickname").value == nickname) ? true : false;
     var infowindow = new google.maps.InfoWindow({
         content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
     });
+    console.log(is_me);
     var marker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
         label: nickname.charAt(0).toUpperCase(),
@@ -60,7 +65,7 @@ function addMarker(nickname, lat, lng, color, map) {
         document.getElementById('lat').value = event.latLng.lat();
         document.getElementById('lng').value = event.latLng.lng();
         actualizarMapa(nickname, event.latLng.lat(), event.latLng.lng(), color);
-        emitimosPosicion(); 
+        emitimosPosicion(event.latLng.lat(), event.latLng.lng());
     });
 
 
@@ -79,8 +84,8 @@ function encuadrarMapa() {
     map.setCenter(bounds.getCenter()); //or use custom center
     map.fitBounds(bounds);
 //    map.setZoom(20);
-    if (map.getZoom() > 19) {
-        map.setZoom(19);
+    if (map.getZoom() > 20) {
+        map.setZoom(20);
     }
 }
 
@@ -104,36 +109,21 @@ function ALLLLL___deleteMarker(index, callback) {
 
 
 function deleteMarker(nickname, callback) {
-    console.log("MARKERSSSSSSSSSSSSSSSS -1");
-    console.log(markers);
-    console.log(markers.length);
+//    console.log(markers);
+//    console.log(markers.length);
 //    console.log(markers[0].nickname);
 //    markers[0].setMap(null);
-    console.log("MARKERSSSSSSCSSSSSSSSSS -2");
+//    console.log("MARKERSSSSSSCSSSSSSSSSS -2");
     for (var i = 0; i < markers.length; i++) {
-        console.log("nickname: " + nickname + " => marker_nickname:" + markers[i].nickname);
         if (nickname == markers[i].nickname) {
-            console.log("Eliminando exclusivamente: " + i + "(" + markers[i].nickname + ")");
+            console.log("(deleteMarker) nickname: " + nickname + " => marker_nickname:" + markers[i].nickname);
+            console.log("(deleteMarker) .... Eliminando exclusivamente: " + i + "(" + markers[i].nickname + ")");
             markers[i].setMap(null);  //del MAPA
             markers.splice(i, 1);  //del ARRAY
         }
     }
     //Callback function WITH paràmetres!
     callback(nickname, parseFloat(lat), parseFloat(lng), color, map);
-
-//
-////    var tempArray = markers; // Create a temporary array
-//    for (var i = 0; i < markers.length; i++) {
-////        console.log(markers[i].id);
-//        markers[i].setMap(null);
-//        if (index == markers[i].id) {
-////            console.log("Eliminando: " + i + "(" + markers[i].id + ")");
-//            markers.splice(i, 1);
-//        }
-//    }
-//
-//    //Callback function WITH paràmetres!
-//    callback(nickname, parseFloat(lat), parseFloat(lng), color, map);
 }
 
 
@@ -145,36 +135,6 @@ function actualizarMapa(nickname, lat, lng, color) {
 
 }
 
-
-function zzZ_actualizarMarker(nickname, lat, lng, color) {
-
-//    console.log("messages-cli: " + nickname + ". lang: " + lat + ", lng: " + lng + ", color: " + color);
-//    console.info("11111111");
-//    console.info(markers[nickname]);
-//Lo eliminamos del mapa
-//    if (markers[nickname] !== undefined) {
-//        markers.nickname.setMap(null);
-    deleteMarker(nickname, function () {
-        addMarker(nickname, parseFloat(lat), parseFloat(lng), color, map);
-    });
-//    }
-//Borramos el MARKER
-//    markers[nickname] = {};
-//    markers[nickname] = undefined;
-//    delete markers[nickname];
-//Lo añadimos al mapa
-
-
-//    console.info("2222222");
-//    console.info(markers[nickname]);
-
-
-//Lo añadimos al mapa en la nueva posicion
-//    addMarker(nickname, parseFloat(lat), parseFloat(lng), color, map);
-
-// var bounds = new google.maps.LatLngBounds();
-
-}
 
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {

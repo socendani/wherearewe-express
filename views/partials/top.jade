@@ -5,12 +5,14 @@
         .row(style="margin-bottom:0px")
             a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
               i.material-icons menu
-            span  WAW:<b>#{nickname} (<b>#{roomid}</b>)</b>&nbsp;&nbsp;
+            span WAW:<b>#{nickname} (<b>#{roomid}</b>)</b>&nbsp;&nbsp;
+            span#totalusuarios.material-icon(style="color:white;padding-top:10px;") 
+            i.material-icons(style="color:white") supervisor_account &nbsp;&nbsp;&nbsp;&nbsp;
             if nickname
                 a#btnBound.btn.waves-effect.waves-light(onclick="encuadrarMapa()",title="Encuadrar") 
                     i.material-icons my_location
             div(style="display:inline;")
-                a.right-align(style="color:white;padding-top:10px;float:right;right:10px",href="/logout",title="Salir")
+                a#btnLogout.right-align(style="color:white;padding-top:10px;float:right;right:10px",href="#",title="Salir")
                      i.material-icons settings_power
                 a.right-align.modal-trigger(style="color:white;padding-top:10px;float:right;right:10px",href="#modal1",title="Info")
                     i.material-icons info

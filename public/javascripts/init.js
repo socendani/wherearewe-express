@@ -51,7 +51,8 @@ function geo_error(error) {
             msg = "Ocurrio un error desconocido.";
             break;
     }
-    Materialize.toast(msg, 4000)
+    ;
+    Materialize.toast(msg, 4000);
 }
 
 
@@ -70,10 +71,21 @@ $(document).ready(function () {
         socket.emit("user-join", data);
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
-    
+
 //    setInterval('emitimosPosicion()', 50000);   
     $('.button-collapse').sideNav({'edge': 'left'});
-    
-   
+
+    $("#btnLogout").on("click", function () {
+        
+        socket.emit("user-left", "", function(data) {
+//            alert(data.data);
+            if (data.data=="logout") {
+                window.location.href = "/logout";
+            }
+        });
+//        window.location.href = "/logout";
+    });
+
+
 });
 

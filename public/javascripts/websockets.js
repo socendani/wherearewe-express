@@ -1,5 +1,12 @@
 
 /**********  Client Socket Receipt Functions ********/
+socket.on('error', function (reason) {
+    console.error('Unable to connect Socket.IO', reason);
+});
+
+socket.on('connect', function () {
+    console.info('successfully established a working and authorized connection');
+});
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
 //    console.log("messages-cli: " + usuario + " - " + mensaje);
@@ -15,16 +22,24 @@ socket.on('usuarios', function (usuarios, total) {
             chat_user = "chat-user-me";
         }
 //        console.log("usaurio => " + obj.nickname + "=" + obj.color);
-        return ('<div  class="' + chat_user + '"><b>' + obj.nickname + '</b></div>');
-    }).join(" ");
-    document.getElementById('usuarios').innerHTML = "<div><b>Usuarios en mapa: " + total + "</b></div>" + html;
+
+        label = nickname.charAt(0).toUpperCase();
+        return ('<div  class="cuadro_user" style="background-color:' + obj.color + '">&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + obj.nickname + '</b></div>');
+    }).join("<br>");
+
+    document.getElementById('totalusuarios').innerHTML = total;
+    document.getElementById('usuarios').innerHTML = html;
 //    console.log(usuarios);
-})
+});
+
+socket.on('force-posicion', function () {
+    emitimosPosicion();
+});
 
 socket.on('posicion', function (nickname, lat, lng, color) {
-    var msg = "messages-cli: " + nickname + ". lang: " + lat + ", lng: " + lng + ", color: " + color;
-    Materialize.toast(msg, 2000);
-//    console.log();
+    var msg = "messages-cli: " + nickname + ". lat: " + lat + ", lng: " + lng + ", color: " + color;
+//    Materialize.toast(msg, 2000);
+    console.log(msg);
     showIconSender();
     actualizarMapa(nickname, lat, lng, color);
 })
@@ -35,8 +50,11 @@ socket.on('posicion', function (nickname, lat, lng, color) {
 /**********  Client Functions ********/
 
 function showIconSender() {
+//    return false;
     $("#iconsender").show();
-    setTimeout($("#iconsender").hide(), 5000);
+    setTimeout(function () {
+        $("#iconsender").hide();
+    }, 2000);
 }
 function actualizarUsuarios(usuario, mensaje) {
 //    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);

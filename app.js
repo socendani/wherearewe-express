@@ -102,12 +102,27 @@ var aplicacion = {};
 //var User = require("./models/users.js").User;
 io.on('connection', function (socket) {
 
-    socket.on('user-left', function (socket) {
-        console.log('user disconnected');
-        mensaje = socket.nickname + " saliendo de mapa (" + socket.roomid + ")";
-        socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-    });
+    socket.on('user-left', function (data, fn) {
+//        console.log('user disconnected');
+        var roomid = socket.roomid;
+        mensaje = "... saliendo de mapa (" + socket.roomid + ")";
+        io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
 
+        //eliminamos el usuario
+        for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
+            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname)
+                    && (aplicacion[roomid].usuarios[i].color === socket.color)) {
+                aplicacion[roomid].usuarios[i].splice(i,1);
+                aplicacion[roomid].total = aplicacion[roomid].total - 1;
+            }
+        }
+        //emitimos usuarios
+        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
+
+
+
+        fn({data: "logout"});
+    });
     function socketlog(socket, mensaje) {
 //        console.log("-- SOCKET --");
 //        console.log(socket);
@@ -125,11 +140,19 @@ io.on('connection', function (socket) {
 ////            return e.nickname;
 //        console.log(e.nickname);
 //    })
+
+    function existeUser(roomid) {
+        for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
+            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname)
+                    && (aplicacion[roomid].usuarios[i].color === socket.color)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     socket.on('new-user', function (data, fn) {
-//        if (addedUser)
-//            return;
-//        
-        //Mantenmos la session socket con el usuario ... 
+//Mantenmos la session socket con el usuario ... 
         socket.nickname = data.nickname.toLowerCase(); //esto .. no funciona¿?
         socket.roomid = data.roomid.toLowerCase();
         socket.color = data.color.toLowerCase();
@@ -144,33 +167,23 @@ io.on('connection', function (socket) {
             var room = {
                 "usuarios": [],
                 "total": 0
-            }
+            };
             Object.defineProperty(aplicacion, roomid, {value: room, writable: true, enumerable: true});
         }
-        aplicacion[roomid].usuarios.push(usuario);
-        aplicacion[roomid].total = aplicacion[roomid].total + 1;
-//        console.log(Object.keys(socket.adapter.rooms[socket.roomid]));
-//        var clients = findClientsSocket(socket.roomid);
-//        console.log(clients);
+        //Un REFRESH de browsers
+        if (!existeUser(roomid)) {
+            aplicacion[roomid].usuarios.push(usuario);
+            aplicacion[roomid].total = aplicacion[roomid].total + 1;
+        }
 
-//        User.add(data);  //Añadimos el nuevo usuario al sistema
-        //Callback client
+//Callback client
         fn({data: "ejemplo de uso de callback en socket.io"});
     });
-
-
     socket.on('user-join', function (data) {
-        mensaje = socket.nickname + " entrando en mapa (" + socket.roomid + ")";
+        mensaje = ".... entrando en el mapa (" + socket.roomid + ")";
         socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-//        kk = io.sockets.connected;
-//        console.log("**************************");
-//        console.log(io.sockets.in(socket.roomid));
-//        console.log(io.sockets.adapter.rooms[socket.roomid]);
-//        console.log("---------------------------------");
-//        for(var item in kk){
-////            console.log (item.id);
-//        }
-//        console.log(io.sockets.sockets.clients());
+        //FORZAMOS a que todos los clientes NOS envíen su posición
+        io.sockets.in(socket.roomid).emit('force-posicion');
     });
     //Nou missatge
     socket.on('new-message', function (mensaje) {
@@ -180,25 +193,22 @@ io.on('connection', function (socket) {
         // io.sockets.emit('messages', messages);
         io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
     });
+
+
+
+
     socket.on('update-position', function (lat, lng) {
-        //un usuario Actualiza SU posición
+        //un usuario Actualiza SU posición y emitimos a todos los datos de ESE usuario
 //        mensaje = "mensaje-server: " + socket.nickname + ". lat: " + lat + ", lng: " + lng;
 //        console.log(mensaje);
         if (socket.roomid !== undefined) {
             io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
         }
-//        console.log(aplicacion);
         io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng, socket.color);
     });
-
-
-
-
-
-
     function findClientsSocket(roomId, namespace) {
         var res = []
-                , ns = io.of(namespace || "/");    // the default namespace is "/"
+                , ns = io.of(namespace || "/"); // the default namespace is "/"
 
         if (ns) {
             for (var id in ns.connected) {

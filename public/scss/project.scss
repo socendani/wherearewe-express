@@ -23,46 +23,57 @@ $break-extralarge:1201px;
 /*********** ..dddMAP *************/
 
 main {
-  min-height:600px;
+    min-height:600px;
 }
 #map {
- min-height:80vh;
-  // min-height:130vh;
-  /*min-height:600px;*/
-  // height:100%;
-  width:100%
+    min-height:80vh;
+    // min-height:130vh;
+    /*min-height:600px;*/
+    // height:100%;
+    width:100%
+}
+
+#usuarios {
+    .cuadro_user{
+        border-radius: 50%;
+        border:1px solid black;
+        background-color: transparent;
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+    }
 }
 
 #messages {
-  div {
-    font-size: 80%;
-  }
-  .chat-user {
-    color: green;
-  }
-  .chat-user-me {
-    color: red;
-  }
+    div {
+        font-size: 80%;
+    }
+    .chat-user {
+        color: green;
+    }
+    .chat-user-me {
+        color: red;
+    }
 }
 
 .gm-style {
-  min-height:600px;
+    min-height:600px;
 }
 
 /************ RESPONSIVE  ********/
 header, main, footer {padding-left:0}
 @media  screen and (min-width: $break-large) {
-  header, main, footer{padding-left:200px}
+    header, main, footer{padding-left:200px}
 }
 @media  screen and (min-width: $break-extralarge) {
-  header, main, footer{padding-left:120px}
+    header, main, footer{padding-left:120px}
 }
 // @media  screen and (max-width: $break-large) {
-    
+
 //   }
 // @media (min-height: 40.125em) {
 
-  
+
 /*#toast-container {
   top: auto !important;
   right: auto !important;
