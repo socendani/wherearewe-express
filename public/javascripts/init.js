@@ -12,7 +12,6 @@ var wpid;
 var nickname = document.getElementById("nickname").value.toLowerCase();
 var roomid = document.getElementById("roomid").value.toLowerCase();
 var color = document.getElementById("color").value.toLowerCase();
-var op = document.getElementById("output");
 var socket = io.connect();
 var is_FirstPosition = true;
 
@@ -20,7 +19,7 @@ function get_pos() {
     if (!!navigator.geolocation) {
         wpid = navigator.geolocation.watchPosition(geo_success, geo_error, {enableHighAccuracy: true, maximumAge: 30000, timeout: 27000});
     } else {
-        op.innerHTML = "ERROR: Your Browser doesnt support the Geo Location API";
+        Materialize.toast("ERROR: Your Browser doesnt support the Geo Location API", 4000)
     }
 }
 //Usamos wathPosition en vez de getCurrentPosition
@@ -40,7 +39,7 @@ function geo_error(error) {
     var msg;
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            msg = "Has negado usar tu localizacion.";
+            msg = "Es necesario activar el GPS/Localización y dar permiso al navegador.";
             break;
         case error.POSITION_UNAVAILABLE:
             msg = "La informacion de localizacion no esta disponible. Prueba actualizando tu Navegador :/";
@@ -52,7 +51,7 @@ function geo_error(error) {
             msg = "Ocurrio un error desconocido.";
             break;
     }
-    op.innerHTML = msg;
+    Materialize.toast(msg, 4000)
 }
 
 
@@ -72,7 +71,7 @@ $(document).ready(function () {
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
     
-    setInterval('emitimosPosicion()', 50000);   
+//    setInterval('emitimosPosicion()', 50000);   
     $('.button-collapse').sideNav({'edge': 'left'});
     
    

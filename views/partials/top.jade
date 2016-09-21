@@ -1,20 +1,21 @@
-.section.light-blue.lighten-1#index-banner
+.section.light-blue.lighten-1#index-banner(style="padding:2px")
   .container
     .nav-wrapper
-        .row
+        .row(style="margin-bottom:0px")
             a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
               i.material-icons menu
-            span  nick: <b>#{nickname}</b>.  roomid: <b>#{roomid}</b>
+            span  WAW:<b>#{nickname} (<b>#{roomid}</b>)</b>&nbsp;&nbsp;
             if nickname
-                a(href="/logout",style="display:inline")  
+                a.btn.waves-effect.waves-light(href="/logout",title="Salir")  
                     i.material-icons launch
-            button#btnBound.btn-flat.waves-effect.waves-light(type="button",onclick="encuadrarMapa()") Encuadre
-             
-            div#output
-            div(style="display:none")
+                a#btnBound.btn.waves-effect.waves-light(onclick="encuadrarMapa()",title="Encuadrar") 
+                    i.material-icons my_location
+            div(style="display:inline;")
+                i#iconsender.material-icons(style="padding-top:10px;float:right") settings_input_antenna
+            div(style="display:xnone")
               input(type="hidden",id="roomid", value="#{roomid}")
               input(type="hidden",id="nickname", value="#{nickname}")
-              input(type="type",id="lat", value="#{lat}")
-              input(type="type",id="lng", value="#{lng}")
+              input(type="text",id="lat", value="#{lat}")
+              input(type="text",id="lng", value="#{lng}")
               input(type="hidden",id="color", value="#{color}")
       

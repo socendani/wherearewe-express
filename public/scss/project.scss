@@ -63,5 +63,10 @@ header, main, footer {padding-left:0}
 // @media (min-height: 40.125em) {
 
   
-
+#toast-container {
+  top: auto !important;
+  right: auto !important;
+  bottom: 10%;
+  right:7%;
+}
 

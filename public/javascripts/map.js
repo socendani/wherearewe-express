@@ -40,6 +40,9 @@ function addMarker(nickname, lat, lng, color, map) {
     } else {
         is_me = false;
     }
+    var infowindow = new google.maps.InfoWindow({
+          content: "<b></b>"+nickname+"<br><b>Lat: </b>"+lat+"<br><b>Long: </b>"+lng+"<br>"
+        });
     var marker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
         label: nickname.charAt(0).toUpperCase(),
@@ -47,6 +50,9 @@ function addMarker(nickname, lat, lng, color, map) {
 //        draggable: true,
         icon: pinSymbol(color, is_me),
         map: map
+    });
+    marker.addListener('click', function () {
+        infowindow.open(map, marker);
     });
     //Personalizate atributes
     marker.nickname = nickname;
@@ -168,7 +174,7 @@ function pinSymbol(color, is_me) {
             fillOpacity: 1,
             strokeColor: '#000',
             strokeWeight: 3,
-            scale: 12
+            scale: 10
         };
     } else {
         return {

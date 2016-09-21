@@ -25,3 +25,11 @@ header, main, footer {
 @media screen and (min-width: 1201px) {
   header, main, footer {
     padding-left: 120px; } }
+
+
+#toast-container {
+  top: auto !important;
+  right: auto !important;
+  bottom: 10%;
+  right:7%;
+}
