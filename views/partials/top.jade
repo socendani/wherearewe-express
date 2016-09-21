@@ -5,18 +5,17 @@
         .row(style="margin-bottom:0px")
             a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
               i.material-icons menu
-            span WAW:<b>#{nickname} (<b>#{roomid}</b>)</b>&nbsp;&nbsp;
             span#totalusuarios.material-icon(style="color:white;padding-top:10px;") 
-            i.material-icons(style="color:white") supervisor_account &nbsp;&nbsp;&nbsp;&nbsp;
-            if nickname
-                a#btnBound.btn.waves-effect.waves-light(onclick="encuadrarMapa()",title="Encuadrar") 
-                    i.material-icons my_location
+            i.material-icons(style="color:white") supervisor_account &nbsp;&nbsp;
             div(style="display:inline;")
-                a#btnLogout.right-align(style="color:white;padding-top:10px;float:right;right:10px",href="#",title="Salir")
-                     i.material-icons settings_power
-                a.right-align.modal-trigger(style="color:white;padding-top:10px;float:right;right:10px",href="#modal1",title="Info")
+            if nickname
+                a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;") &nbsp;&nbsp;
+                    i.material-icons my_location
+                a.left-align.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;&nbsp;
                     i.material-icons info
-                i#iconsender.material-icons(style="padding-top:10px;float:right;padding-right:10px") settings_input_antenna
+                i#iconsender.material-icons(style="padding-right:10px") settings_input_antenna
+                a#btnLogout.right-align(style="color:white;float:right;right:10px",href="#",title="Salir")
+                     i.material-icons settings_power
             div(style="display:none")
               input(type="hidden",id="roomid", value="#{roomid}")
               input(type="hidden",id="nickname", value="#{nickname}")

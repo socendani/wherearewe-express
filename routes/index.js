@@ -16,6 +16,7 @@ fs.readFile('./VERSION', 'utf8', function (err, data) {
 function isAuthenticated(req, res, next) {
 //    req.session.roomid =  require('querystring').escape(req.params.habitacion.toLowerCase());
     req.session.roomid =  req.params.habitacion.toLowerCase();
+    req.session.nickname =  req.params.nickname.toLowerCase();
     // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
     if (req.session.nickname)
         return next();
@@ -74,5 +75,10 @@ router.get('/room/:habitacion', isAuthenticated, function (req, res, next) {
     controller.init(res, req);
 //    next();
 });
+router.get('/room/:habitacion/:nickname', isAuthenticated, function (req, res, next) {
 
+    var controller = require("../controllers/room_controller");
+    controller.init(res, req);
+//    next();
+});
 module.exports = router;

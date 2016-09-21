@@ -1,18 +1,19 @@
 .container
   div#nav-mobile.side-nav.fixed
-    .row(style="margin:5px")
-      h5.header.center Where are We 
-            
-      .card.light-blue.darken-3
-        .card-content.black-text.center
-          //- .row-fluid(style="margin:5px")
-          form(method='post',onsubmit="return addMessage(this)",autocomplete="off",style="display:inline")
-              input(type="hidden",name="roomid",id="roomid",value="#{roomid}",autocomplete="off")
-              input(type="hidden",name="nickname",id="nickname",value="#{nickname}",autocomplete="off")
-              input.input-field(type="text",name="texto",id="texto",placeholder="Chat..",autocomplete="off",style="display:inline")
+    .row.center(style="margin:5px")
+        h5.header.center Where are We
+        <br><b>#{nickname}</b>&nbsp;&nbsp;(<b>#{roomid}</b>)
 
-              button.btn.waves-effect.waves-light(type="submit",style="display:inline") 
-                i.material-icons send
+        .card.light-blue.darken-3
+          .card-content.black-text.center
+            //- .row-fluid(style="margin:5px")
+            form(method='post',onsubmit="return addMessage(this)",autocomplete="off",style="display:inline")
+                input(type="hidden",name="roomid",id="roomid",value="#{roomid}",autocomplete="off")
+                input(type="hidden",name="nickname",id="nickname",value="#{nickname}",autocomplete="off")
+                input.input-field(type="text",name="texto",id="texto",placeholder="Chat..",autocomplete="off",style="display:inline")
+
+                button.btn.waves-effect.waves-light(type="submit",style="display:inline") 
+                  i.material-icons send
           
     #usuarios(style='margin:10px')
     hr
