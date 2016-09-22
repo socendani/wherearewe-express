@@ -22,6 +22,6 @@ No se utiliza base de datos alguna ni acumulación de mensajes en variables,
 al mismo tiempo se pretende mantener multiples Rooms sin solapamiento de mensajes ni coordenadas.
 
 ## Author
-Dani Morte <socendani AT gmail dot com>
+Dani Morte (@socendani) <socendani AT gmail dot com>
 
 

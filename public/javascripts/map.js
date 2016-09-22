@@ -48,7 +48,7 @@ function addMarker(nickname, lat, lng, color, map) {
         position: {lat: lat, lng: lng},
         label: nickname.charAt(0).toUpperCase(),
         title: nickname,
-        draggable: true,
+//        draggable: true,
         icon: pinSymbol("#"+color, is_me),
         map: map
     });
@@ -61,12 +61,12 @@ function addMarker(nickname, lat, lng, color, map) {
     marker.color = color;
 
 //    console.log(marker);
-    google.maps.event.addListener(marker, 'dragend', function (event) {
-        document.getElementById('lat').value = event.latLng.lat();
-        document.getElementById('lng').value = event.latLng.lng();
-        actualizarMapa(nickname, event.latLng.lat(), event.latLng.lng(), color);
-        emitimosPosicion(event.latLng.lat(), event.latLng.lng());
-    });
+//    google.maps.event.addListener(marker, 'dragend', function (event) {
+//        document.getElementById('lat').value = event.latLng.lat();
+//        document.getElementById('lng').value = event.latLng.lng();
+//        actualizarMapa(nickname, event.latLng.lat(), event.latLng.lng(), color);
+//        emitimosPosicion(event.latLng.lat(), event.latLng.lng());
+//    });
 
 
     //Marker al MAPA

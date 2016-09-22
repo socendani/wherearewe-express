@@ -1,7 +1,7 @@
 {
     "name": "wherearewe-express",
     "description": "Where Are We WebSite for map-chat friends around",
-    "version": "1.6.0",
+    "version": "1.6.1",
     "private": true,
     "scripts": {
         "dani": "nodemon ./bin/www2",
