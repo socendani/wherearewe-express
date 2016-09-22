@@ -7,6 +7,15 @@ socket.on('error', function (reason) {
 socket.on('connect', function () {
     console.info('successfully established a working and authorized connection');
 });
+socket.on('disconnect', function () {
+    console.info('connection lost..');
+    html = "<h3>Se ha perdido <br>la conexión .. reload en 5 segundos!</h3>";
+    Materialize.toast(html, 3000);
+    setTimeout(function () {
+        location.reload();
+    }, 5000);
+
+});
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
 //    console.log("messages-cli: " + usuario + " - " + mensaje);

@@ -98,6 +98,8 @@ app.use(function (err, req, res, next) {
 var users = [];
 var usuarios = {};
 var aplicacion = {};
+var projecte = "";
+var version = "0.0";
 
 //var User = require("./models/users.js").User;
 io.on('connection', function (socket) {

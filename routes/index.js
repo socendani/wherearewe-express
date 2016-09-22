@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var fs = require("fs");
-var projecte = "";
-var version = "0.0";
+
 //fs.readFile('./VERSION', 'utf8', function (err, data) {
 fs.readFile('./package.json', 'utf8', function (err, data) {
     if (err) {
