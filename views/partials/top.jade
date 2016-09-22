@@ -10,7 +10,7 @@
                
                 if nickname
                     span#totalmensajes(style="color:black;vertical-align: 5px;")
-                    i#icontotalmensajes.material-icons(style="color:black") comment_alert
+                    a#icontotalmensajes.button-collapse.material-icons.top-nav(style="color:black",data-activates="nav-mobile",href="#") comment_alert
 
                     a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;") &nbsp;&nbsp;
                         i.material-icons my_location
@@ -38,14 +38,13 @@
 #modal1.modal
     .modal-content
         
-        h1  wherearewe-express
+        h3  wherearewe-express
         p Where Are We (NodeJS - Express -SocketIO)
         
-        h3 Learn
+        h4 Learn
         p Práctica a título personal de NodeJS y Express
         
-        h3 Tecnologias
-        
+        h4 Tecnologías
         p Para esta práctica se ha utilizado.
         ul
          li NodeJS
@@ -57,14 +56,14 @@
          li npm packages
          li bower y gulp
          li heroku deploy vía Github
-        h3 Sin base de datos
-        p
-           El primer objetivo era realizar un sistema en tiempo real muy simple pero efímero.
-           No se utiliza base de datos alguna ni acumulación de mensajes en variables,
-           al mismo tiempo se pretende mantener multiples Rooms sin solapamiento de mensajes ni coordenadas.
+         
+        h4 Sin base de datos
+        p  El primer objetivo era realizar un sistema en tiempo real muy simple pero efímero. No se utiliza base de datos alguna ni acumulación de mensajes en variables, al mismo tiempo se pretende mantener multiples Rooms sin solapamiento de mensajes ni coordenadas.
         
-        h3 Author
+        h4 Author
         span Dani Morte (@socendani) <socendani AT gmail dot com>  <br>
+        a(href="https://github.com/socendani/wherearewe-express",target="_blank") https://github.com/socendani/wherearewe-express
+        br
         span 2016 #{title}.
 
     .modal-footer
