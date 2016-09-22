@@ -1,7 +1,7 @@
 {
     "name": "waw-express",
     "description": "Where Are We WebSite for map-chat friends around. Express version",
-    "version": "1.6.4",
+    "version": "1.6.5",
     "private": true,
     "scripts": {
         "dani": "nodemon ./bin/www2",
