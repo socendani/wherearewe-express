@@ -12,6 +12,7 @@ var routes = require('./routes/index');
 var app = express();
 var server = require("http").Server(app); //for websocket
 var io = require("socket.io")(server); //for websocket
+var key_googlemaps="";
 
 
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(cors());
 //app.use(morgan('combined'))
+
 
 //Cookies: //http://expressjs.com/es/advanced/best-practice-security.html
 app.disable('x-powered-by');

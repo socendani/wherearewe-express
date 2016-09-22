@@ -12,6 +12,15 @@ fs.readFile('./package.json', 'utf8', function (err, data) {
     projecte = obj.name;
     console.log("Project: " + projecte + " - v. " + version);
 });
+
+//CONFIG secret
+fs.readFile('./config/key.googlemaps', 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+    key_googlemaps=data;
+});
+
 function url_show(req) {
     return "/room/" + req.session.roomid + "/" + req.session.nickname + "/" + req.session.color;
 }

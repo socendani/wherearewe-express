@@ -40,9 +40,9 @@ function addMarker(nickname, lat, lng, color, map) {
         return false;
 //    console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
     is_me = (document.getElementById("nickname").value == nickname) ? true : false;
-    var infowindow = new google.maps.InfoWindow({
-        content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
-    });
+//    var infowindow = new google.maps.InfoWindow({
+//        content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
+//    });
 //    console.log(is_me);
     var marker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
@@ -52,9 +52,9 @@ function addMarker(nickname, lat, lng, color, map) {
         icon: pinSymbol("#"+color, is_me),
         map: map
     });
-    marker.addListener('click', function () {
-        infowindow.open(map, marker);
-    });
+//    marker.addListener('click', function () {
+//        infowindow.open(map, marker);
+//    });
     //Personalizate atributes
     marker.nickname = nickname;
     marker.id = nickname;
