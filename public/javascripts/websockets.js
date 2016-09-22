@@ -23,8 +23,8 @@ socket.on('usuarios', function (usuarios, total) {
         }
 //        console.log("usaurio => " + obj.nickname + "=" + obj.color);
 
-        label = nickname.charAt(0).toUpperCase();
-        return ('<div  class="cuadro_user" style="background-color:' + obj.color + '">&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + obj.nickname + '</b></div>');
+        label = obj.nickname.charAt(0).toUpperCase();
+        return ('<div  class="cuadro_user" style="background-color:#' + obj.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + obj.nickname + '</b></div>');
     }).join("<br>");
 
     document.getElementById('totalusuarios').innerHTML = total;
@@ -37,9 +37,9 @@ socket.on('force-posicion', function () {
 });
 
 socket.on('posicion', function (nickname, lat, lng, color) {
-    var msg = "messages-cli: " + nickname + ". lat: " + lat + ", lng: " + lng + ", color: " + color;
+//    var msg = "messages-cli: " + nickname + ". lat: " + lat + ", lng: " + lng + ", color: " + color;
 //    Materialize.toast(msg, 2000);
-    console.log(msg);
+//    console.log(msg);
     showIconSender();
     actualizarMapa(nickname, lat, lng, color);
 })
@@ -65,7 +65,8 @@ function actualizarUsuarios(usuario, mensaje) {
     }
     html = '<div class="' + chat_user + '"><b>' + usuario + ':</b></div>';
     $('#usuarios').prepend(html);
-    Materialize.toast(html, 4000);
+
+//    Materialize.toast(html, 4000);
 }
 
 function actualizarChat(usuario, mensaje) {
@@ -74,26 +75,16 @@ function actualizarChat(usuario, mensaje) {
     if (nickname == usuario) {
         chat_user = "chat-user-me";
         usuario = "Yo";
+        total_mensajes = 0;
+    } else {
+        total_mensajes++;
     }
     html = '<div class="' + chat_user + '"><b>' + usuario + ':</b><em>' + mensaje + '</em></div>';
     $('#messages').prepend(html);
-    Materialize.toast(html, 4000);
+    pintar_mensajes();
+//    Materialize.toast(html, 4000);
 }
 
-//function NOTUSE_actualizarChat_OLD(data) {
-//    data.reverse();
-//    var html = data.map(function (elem, index) {
-//        chat_user = "chat-user";
-//        if (nickname == elem.nickname) {
-//            chat_user = "chat-user-me";
-//            elem.nickname = "Yo";
-//        }
-//        console.log("actualizarChat => " + elem.nickname + "=" + elem.text);
-//        return ('<div class="' + chat_user + '"><b>' + elem.nickname + ':</b><em>' + elem.text + '</em></div>');
-//    }).join(" ");
-//
-//    document.getElementById('messages').innerHTML = html;
-//}
 
 function addMessage() {
 //    var message = {

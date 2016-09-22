@@ -103,25 +103,21 @@ var aplicacion = {};
 io.on('connection', function (socket) {
 
     socket.on('user-left', function (data, fn) {
-//        console.log('user disconnected');
+        console.log('user disconnected: '+data);
         var roomid = socket.roomid;
-        mensaje = "... saliendo de mapa (" + socket.roomid + ")";
+        mensaje = "... saliendo del mapa (" + socket.roomid + ")";
         io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-
         //eliminamos el usuario
         for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
             if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname)
                     && (aplicacion[roomid].usuarios[i].color === socket.color)) {
-                aplicacion[roomid].usuarios[i].splice(i,1);
+                aplicacion[roomid].usuarios.splice(i,1);
                 aplicacion[roomid].total = aplicacion[roomid].total - 1;
             }
         }
         //emitimos usuarios
-        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
-
-
-
-        fn({data: "logout"});
+//        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
+        fn("logout");
     });
     function socketlog(socket, mensaje) {
 //        console.log("-- SOCKET --");

@@ -27,7 +27,7 @@ function emitimosPosicion(lat, lng) {
     if (lat == "undefined")
         return false;
 
-    console.log("(emitimosPosicion) nueva posicion: " + lat + "," + lng + " [" + document.getElementById("nickname").value + "]");
+//    console.log("(emitimosPosicion) nueva posicion: " + lat + "," + lng + " [" + document.getElementById("nickname").value + "]");
     socket.emit('update-position', lat, lng);
     document.getElementById("lat").value = lat;
     document.getElementById("lng").value = lng;
@@ -38,18 +38,18 @@ function emitimosPosicion(lat, lng) {
 function addMarker(nickname, lat, lng, color, map) {
     if (!lat)
         return false;
-    console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
+//    console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
     is_me = (document.getElementById("nickname").value == nickname) ? true : false;
     var infowindow = new google.maps.InfoWindow({
         content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
     });
-    console.log(is_me);
+//    console.log(is_me);
     var marker = new google.maps.Marker({
         position: {lat: lat, lng: lng},
         label: nickname.charAt(0).toUpperCase(),
         title: nickname,
         draggable: true,
-        icon: pinSymbol(color, is_me),
+        icon: pinSymbol("#"+color, is_me),
         map: map
     });
     marker.addListener('click', function () {
@@ -116,8 +116,8 @@ function deleteMarker(nickname, callback) {
 //    console.log("MARKERSSSSSSCSSSSSSSSSS -2");
     for (var i = 0; i < markers.length; i++) {
         if (nickname == markers[i].nickname) {
-            console.log("(deleteMarker) nickname: " + nickname + " => marker_nickname:" + markers[i].nickname);
-            console.log("(deleteMarker) .... Eliminando exclusivamente: " + i + "(" + markers[i].nickname + ")");
+//            console.log("(deleteMarker) nickname: " + nickname + " => marker_nickname:" + markers[i].nickname);
+//            console.log("(deleteMarker) .... Eliminando exclusivamente: " + i + "(" + markers[i].nickname + ")");
             markers[i].setMap(null);  //del MAPA
             markers.splice(i, 1);  //del ARRAY
         }

@@ -9,6 +9,7 @@
 /************** GLOBALES ****************/
 var yo;
 var wpid;
+var total_mensajes = 0;
 var nickname = document.getElementById("nickname").value.toLowerCase();
 var roomid = document.getElementById("roomid").value.toLowerCase();
 var color = document.getElementById("color").value.toLowerCase();
@@ -33,6 +34,15 @@ function geo_success(position) {
     }
 }
 
+function pintar_mensajes() {
+    if (total_mensajes <= 0) {
+        $('#icontotalmensajes').hide();
+        document.getElementById('totalmensajes').innerHTML = "";
+    } else {
+        $('#icontotalmensajes').show();
+        document.getElementById('totalmensajes').innerHTML = total_mensajes;
+    }
+}
 
 
 function geo_error(error) {
@@ -63,27 +73,30 @@ function init() {
 
 }
 
+function salir(data) {
+    if (data == "logout") {
+        window.location.href = "/logout";
+    }
+}
+
 
 
 $(document).ready(function () {
+    pintar_mensajes();
 //Inicio de emision
     socket.emit("new-user", {nickname: nickname, roomid: roomid, color: color}, function (data) {
         socket.emit("user-join", data);
     });
 //    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
 
-//    setInterval('emitimosPosicion()', 50000);   
+//    setInterval('emitimosPosicion()', 50000);
+
+    $('.modal-trigger').leanModal();
+
     $('.button-collapse').sideNav({'edge': 'left'});
 
     $("#btnLogout").on("click", function () {
-        
-        socket.emit("user-left", "", function(data) {
-//            alert(data.data);
-            if (data.data=="logout") {
-                window.location.href = "/logout";
-            }
-        });
-//        window.location.href = "/logout";
+        socket.emit("user-left", "salir", salir);
     });
 
 

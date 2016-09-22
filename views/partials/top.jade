@@ -1,31 +1,74 @@
 
-.section.light-blue.lighten-1#index-banner(style="padding:2px")
+.section.light-blue.lighten-1#index-banner(style="padding:2px;height:32px")
   .container
-    .nav-wrapper
-        .row(style="margin-bottom:0px")
-            a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
-              i.material-icons menu
-            span#totalusuarios.material-icon(style="color:white;padding-top:10px;") 
-            i.material-icons(style="color:white") supervisor_account &nbsp;&nbsp;
-            div(style="display:inline;")
-            if nickname
-                a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;") &nbsp;&nbsp;
-                    i.material-icons my_location
-                a.left-align.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;&nbsp;
-                    i.material-icons info
-                i#iconsender.material-icons(style="padding-right:10px") settings_input_antenna
-                a#btnLogout.right-align(style="color:white;float:right;right:10px",href="#",title="Salir")
-                     i.material-icons settings_power
-            div(style="display:none")
-              input(type="hidden",id="roomid", value="#{roomid}")
-              input(type="hidden",id="nickname", value="#{nickname}")
-              input(type="text",id="lat", value="#{lat}")
-              input(type="text",id="lng", value="#{lng}")
-              input(type="hidden",id="color", value="#{color}")      
+        .row(style="vertical-align:bottom;")
+            .col.s12
+                a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
+                    i.material-icons(style="color:white;vertical-align: 5px;") menu
+
+                &nbsp;&nbsp;
+               
+                if nickname
+                    span#totalmensajes(style="color:black;vertical-align: 5px;")
+                    i#icontotalmensajes.material-icons(style="color:black") comment_alert
+
+                    a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;") &nbsp;&nbsp;
+                        i.material-icons my_location
+                        
+                    a.left-align.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;&nbsp;
+                        i.material-icons info
+                    
+                    span#totalusuarios.material-icon(style="color:white;vertical-align: 5px;") 
+                    i.material-icons(style="color:white") supervisor_account 
+
+                    &nbsp;&nbsp;
+
+                    a#btnLogout(style="color:white;float:right;right:10px",href="#",title="Salir")
+                         i.material-icons settings_power
+                    
+                    i#iconsender.material-icons(style="float:right;") settings_input_antenna
+                    
+                div(style="display:none")
+                  input(type="hidden",id="roomid", value="#{roomid}")
+                  input(type="hidden",id="nickname", value="#{nickname}")
+                  input(type="hidden",id="lat", value="#{lat}")
+                  input(type="hidden",id="lng", value="#{lng}")
+                  input(type="hidden",id="color", value="#{color}")      
 
 #modal1.modal
     .modal-content
-        h4 Info
-        p Lorem Ipsum
+        h1  wherearewe-express
+        p Where Are We (NodeJS - Express -SocketIO)
+        h2
+          a#Learn_3
+          | Learn
+        p Práctica a título personal de NodeJS y Express
+        h2
+          a#Tecnologias_6
+          | Tecnologias
+        p
+          | Para esta práctica se ha utilizado.
+          | . NodeJS
+          | . ExpressJS
+          | . 
+          a(href='http://Socket.io') Socket.io
+          | . Jade Engine
+          | . MaterializeCSS
+          | . SASS
+          | . npm packages
+          | . bower y gulp
+          | . heroku deploy vía Github
+        h2
+          a#Sin_base_de_datos_18
+          | Sin base de datos
+        p
+          | El primer objetivo era realizar un sistema en tiempo real muy simple pero efímero.
+          | No se utiliza base de datos alguna ni acumulación de mensajes en variables,
+          | al mismo tiempo se pretende mantener multiples Rooms sin solapamiento de mensajes ni coordenadas.
+        h2
+          a#Author_23
+          | Author
+        p Dani Morte (@socendani) <socendani AT gmail dot com>
+
     .modal-footer
         a.modal-action.modal-close(href="#!")
