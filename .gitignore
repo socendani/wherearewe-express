@@ -49,3 +49,6 @@ Temporary Items
 /nbproject/private/
 .vscode
 nbproject/
+./.vscode
+./.tmp
+./config
