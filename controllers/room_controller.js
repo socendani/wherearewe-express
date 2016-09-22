@@ -9,8 +9,8 @@ module.exports = {
     res.render('index', {
       title: projecte +" v." + version,
       fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
-      nickname: req.session.nickname,
-      roomid: req.session.roomid,
+      nickname: require('querystring').unescape(req.session.nickname),
+      roomid: require('querystring').unescape(req.session.roomid),
       color: req.session.color,
       projecte: projecte
     });

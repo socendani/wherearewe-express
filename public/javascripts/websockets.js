@@ -19,6 +19,10 @@ socket.on('disconnect', function () {
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
 //    console.log("messages-cli: " + usuario + " - " + mensaje);
+
+    if (mensaje.indexOf("entrando en el mapa")>=0) {
+         Materialize.toast(usuario+mensaje, 4000);
+    }
     showIconSender();
     actualizarChat(usuario, mensaje);
 })
