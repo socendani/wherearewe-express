@@ -26,7 +26,8 @@ fs.readFile('./config/key.googlemaps', 'utf8', function (err, data) {
 });
 
 function url_show(req) {
-    return "/room/" + req.session.roomid + "/" + req.session.nickname + "/" + req.session.color;
+//    return "/room/" + req.session.roomid + "/" + req.session.nickname + "/" + req.session.color;
+    return "/room/" + req.session.roomid + "/";
 }
 
 
@@ -79,8 +80,8 @@ router.get('/', function (req, res, next) {
     res.render('login', {
         fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
         color: Math.floor(Math.random() * 16777215).toString(16),
-        nickname: "Pon un nick",
-        roomid: req.session.roomid || "hab1",
+        nickname: "Pon tu apodo ..",
+        roomid: req.session.roomid || "agora",
         version: version
                 // title: projecte +" " + version
     });
@@ -100,10 +101,13 @@ router.get('/room/:habitacion/:nickname/:color?', isAuthenticated, function (req
     var controller = require("../controllers/room_controller");
     controller.init(res, req);
 //    next();
+
 });
-router.get('/room/:habitacion', function (req, res, next) {
-    req.session.roomid = require('querystring').escape(req.params.habitacion.toLowerCase());
-    res.redirect('/');
+router.get('/room/:habitacion', isAuthenticated, function (req, res, next) {
+//    req.session.roomid = require('querystring').escape(req.params.habitacion.toLowerCase());
+//    res.redirect('/');
+    var controller = require("../controllers/room_controller");
+    controller.init(res, req);
 //    next();
 });
 module.exports = router;
