@@ -12,7 +12,7 @@ var routes = require('./routes/index');
 var app = express();
 var server = require("http").Server(app); //for websocket
 var io = require("socket.io")(server); //for websocket
-var key_googlemaps="";
+var key_googlemaps = "";
 
 
 
@@ -108,7 +108,7 @@ var version = "0.0";
 io.on('connection', function (socket) {
 
     socket.on('user-left', function (data, fn) {
-        console.log('user disconnected: '+data);
+        console.log('user disconnected: ' + data);
         var roomid = socket.roomid;
         mensaje = "... saliendo del mapa (" + socket.roomid + ")";
         io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
@@ -116,7 +116,7 @@ io.on('connection', function (socket) {
         for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
             if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname)
                     && (aplicacion[roomid].usuarios[i].color === socket.color)) {
-                aplicacion[roomid].usuarios.splice(i,1);
+                aplicacion[roomid].usuarios.splice(i, 1);
                 aplicacion[roomid].total = aplicacion[roomid].total - 1;
             }
         }
@@ -182,12 +182,14 @@ io.on('connection', function (socket) {
     });
     socket.on('user-join', function (data) {
         mensaje = ".... entrando en el mapa (" + socket.roomid + ")";
+        console.log(mensaje);
         socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
         //FORZAMOS a que todos los clientes NOS envíen su posición
         io.sockets.in(socket.roomid).emit('force-posicion');
     });
     //Nou missatge
     socket.on('new-message', function (mensaje) {
+        console.log(mensaje);
 //        socketlog(socket, mensaje);
 //        roomid = data.roomid;
         // messages.push(data);
@@ -201,7 +203,7 @@ io.on('connection', function (socket) {
     socket.on('update-position', function (lat, lng) {
         //un usuario Actualiza SU posición y emitimos a todos los datos de ESE usuario
 //        mensaje = "mensaje-server: " + socket.nickname + ". lat: " + lat + ", lng: " + lng;
-//        console.log(mensaje);
+        console.log(mensaje);
         if (socket.roomid !== undefined) {
             io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
         }
