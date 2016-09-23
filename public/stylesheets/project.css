@@ -5,7 +5,7 @@ main {
   min-height: 600px; }
 
 #map {
-  min-height: 80vh;
+  min-height: 90vh;
   /*min-height:600px;*/
   width: 100%; }
 
@@ -36,7 +36,7 @@ header, main, footer {
     padding-left: 200px; } }
 @media screen and (min-width: 1201px) {
   header, main, footer {
-    padding-left: 120px; } }
+    padding-left: 300px; } }
 /*#toast-container {
   top: auto !important;
   right: auto !important;

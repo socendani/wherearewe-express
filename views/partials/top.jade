@@ -1,29 +1,36 @@
 
-.section.light-blue.lighten-1#index-banner(style="padding:2px;height:32px")
-  .container
-        .row(style="vertical-align:bottom;")
-            .col.s12
-                a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
-                    i.material-icons(style="color:white;vertical-align: 5px;") menu
+.section.light-blue.lighten-1#index-banner(style="padding:2px;height:52px")
+        .row(style="")
+                table(style="border:0px solid red;width:100%;padding:0px;margin:0px")
+                    tr
+                        td
+                            a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
+                                i.material-icons(style="color:white;") menu
+                        td
+                            span#totalmensajes(style="color:black;")
+                            a#icontotalmensajes.button-collapse.material-icons.top-nav(style="color:black",data-activates="nav-mobile",href="#") comment_alert
 
-                if nickname
-                    span#totalmensajes(style="color:black;vertical-align: 5px;")
-                    a#icontotalmensajes.button-collapse.material-icons.top-nav(style="color:black",data-activates="nav-mobile",href="#") comment_alert
+                            span &nbsp;&nbsp;
+                            
+                            span#totalusuarios.material-icon(style="color:white;") 
+                            i.material-icons(style="color:white") supervisor_account 
+                        td
+                            a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;")
+                                i.material-icons my_location
+                        td(style="text-align:right;")        
+                            i#iconsender.material-icons(style="") settings_input_antenna
+                            
+                            span &nbsp;&nbsp;
+ 
+                            a.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;&nbsp;
+                                i.material-icons info
+                                    
+                            span &nbsp;&nbsp;
+                             
+                            a#btnLogout(style="color:white;",href="#",title="Salir")
+                                 i.material-icons settings_power
 
-                    a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;") &nbsp;&nbsp;
-                        i.material-icons my_location
-                        
-                    a.left-align.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;&nbsp;
-                        i.material-icons info
-                    
-                    span#totalusuarios.material-icon(style="color:white;vertical-align: 5px;") 
-                    i.material-icons(style="color:white") supervisor_account 
-
-                    
-                    a#btnLogout(style="color:white;float:right;right:10px",href="#",title="Salir")
-                         i.material-icons settings_power
-                    
-                    i#iconsender.material-icons(style="float:right;") settings_input_antenna
+                            
                     
                 div(style="display:none")
                   input(type="hidden",id="roomid", value="#{roomid}")

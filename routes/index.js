@@ -10,7 +10,11 @@ fs.readFile('./package.json', 'utf8', function (err, data) {
     obj = JSON.parse(data);
     version = obj.version;
     projecte = obj.name;
-    console.log("Project: " + projecte + " - v. " + version);
+    console.log("**********************************************************");
+    console.log("******        socendani                            *******");
+    console.log("         Project: " + projecte + " - v. " + version);
+    console.log("******                                             *******");
+    console.log("**********************************************************");
 });
 
 //CONFIG secret
@@ -18,7 +22,7 @@ fs.readFile('./config/key.googlemaps', 'utf8', function (err, data) {
     if (err) {
         return console.log(err);
     }
-    key_googlemaps=data;
+    key_googlemaps = data;
 });
 
 function url_show(req) {
@@ -59,8 +63,8 @@ router.post('/login', function (req, res, next) {
     req.session.roomid = require('querystring').escape(req.body.roomid.toLowerCase());
     req.session.color = req.body.color.toLowerCase().substr(1); //quitamos almohadilla
     //Si todo es OK.. vamos a la room
-//    res.redirect(url_show(req));
-    res.redirect("/room/");
+    res.redirect(url_show(req));
+//    res.redirect("/room/");s
 //    res.redirect("/room/" + req.session.roomid + "/" + req.session.nickname + "/" + req.session.color);
 
 });
@@ -91,7 +95,10 @@ router.get('/room/', isAuthenticated, function (req, res, next) {
 });
 router.get('/room/:habitacion/:nickname/:color?', isAuthenticated, function (req, res, next) {
 //    El middleWare 'isAuthenticated' se encargará de poner variables de session 
-    res.redirect('/room/');
+//    res.redirect('/room/');
+//    res.redirect('/room/'+ req.session.roomid );
+    var controller = require("../controllers/room_controller");
+    controller.init(res, req);
 //    next();
 });
 router.get('/room/:habitacion', function (req, res, next) {
