@@ -31,7 +31,7 @@ function url_show(req) {
     var nickname=require('querystring').escape(req.body.nickname.toLowerCase());
     var color=require('querystring').escape(req.body.color.toLowerCase().substr(1));
     var url="/room/" + roomid + "/" + nickname + "/" + color;
-    console.log(url);
+//    console.log(url);
     return url;
 //    return "/room/" + req.session.roomid + "/";
 }
