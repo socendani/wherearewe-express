@@ -67,7 +67,9 @@
          li heroku deploy vía Github
          
         h4 Sin base de datos
-        p El primer objetivo era realizar un sistema en tiempo real muy simple pero efímero. No se utiliza base de datos alguna ni acumulación de mensajes en variables, al mismo tiempo se pretende mantener multiples Rooms sin solapamiento de mensajes ni coordenadas.
+        span El primer objetivo es realizar un sistema en tiempo real (chat y geolocalización) muy muy simple y efímero. 
+        br 
+        span No se utiliza base de datos alguna, ni acumulación de mensajes ni siquiera variables de session para evitar <b>memory leaks</b> de node.js, al mismo tiempo que se pretende mantener multiples <b>Rooms</b> sin solapamiento de mensajes ni coordenadas.
         
         h4 Author
         span Dani Morte (@socendani) <socendani AT gmail dot com>  <br>
