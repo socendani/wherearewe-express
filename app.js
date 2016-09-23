@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 //var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var sessions = require('express-session');
+//var sessions = require('express-session');
 var cors = require("cors");
 var routes = require('./routes/index');
 //var morgan = require('morgan');
@@ -34,23 +34,23 @@ app.use(cors());
 
 //Cookies: //http://expressjs.com/es/advanced/best-practice-security.html
 app.disable('x-powered-by');
-var expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-app.use(sessions({
-    secret: "PROBANDOLASSESIONES",
-    resave: true,
-    saveUninitialized: true,
-    name: 'session',
-    keys: ['key1', 'key2'],
-    cookie: {
-        // secure: true,
-        maxAge: 1000 * 60 * 60,
-        httpOnly: true,
-        // domain: 'example.com',
-        // path: 'foo/bar',
-        expires: expiryDate
-    }
-
-}));
+//var expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+//app.use(sessions({
+//    secret: "PROBANDOLASSESIONES",
+//    resave: true,
+//    saveUninitialized: true,
+//    name: 'session',
+//    keys: ['key1', 'key2'],
+//    cookie: {
+//        // secure: true,
+//        maxAge: 1000 * 60 * 60,
+//        httpOnly: true,
+//        // domain: 'example.com',
+//        // path: 'foo/bar',
+//        expires: expiryDate
+//    }
+//
+//}));
 //Revisar si es necesario esto:
 app.use('/', routes);
 //Situación
