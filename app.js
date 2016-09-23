@@ -43,6 +43,7 @@ app.use(sessions({
     keys: ['key1', 'key2'],
     cookie: {
         // secure: true,
+        maxAge: 1000 * 60 * 60,
         httpOnly: true,
         // domain: 'example.com',
         // path: 'foo/bar',
@@ -104,6 +105,14 @@ var aplicacion = {};
 var projecte = "";
 var version = "0.0";
 
+//function sessionCleanup() {
+//    sessionStore.all(function (err, sessions) {
+//        for (var i = 0; i < sessions.length; i++) {
+//            sessionStore.get(sessions[i], function () {});
+//        }
+//    });
+//}
+
 //var User = require("./models/users.js").User;
 io.on('connection', function (socket) {
 
@@ -122,6 +131,7 @@ io.on('connection', function (socket) {
         }
         //emitimos usuarios
 //        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
+       
         fn("logout");
     });
     function socketlog(socket, mensaje) {
