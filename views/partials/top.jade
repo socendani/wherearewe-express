@@ -6,23 +6,30 @@
                         td
                             a.button-collapse.hide-on-large-only.top-nav.waves-effect.waves-light.circle(data-activates="nav-mobile",href="#")
                                 i.material-icons(style="color:white;") menu
-                        td
+                                
+                            span &nbsp;
+                            
                             span#totalmensajes(style="color:black;")
-                            a#icontotalmensajes.button-collapse.material-icons.top-nav(style="color:black",data-activates="nav-mobile",href="#") comment_alert
+                            i#icontotalmensajes.material-icons(style="color:black; width:25px") comment_alert
 
-                            span &nbsp;&nbsp;
+                            span &nbsp;
                             
                             span#totalusuarios.material-icon(style="color:white;") 
                             i.material-icons(style="color:white") supervisor_account 
-                        td
+                            
+                            span &nbsp;
+                            
                             a#btnBound(onclick="encuadrarMapa()",title="Encuadrar",style="color:white;")
                                 i.material-icons my_location
-                        td(style="text-align:right;")        
+                                
+                        td(style="width:40px;")  
+                            span &nbsp;
                             i#iconsender.material-icons(style="") settings_input_antenna
                             
-                            span &nbsp;&nbsp;
+                        td(style="text-align:right")    
+                            span &nbsp;
  
-                            a.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;&nbsp;
+                            a.modal-trigger(style="color:white;",href="#modal1",title="Info") &nbsp;
                                 i.material-icons info
                                     
                             span &nbsp;&nbsp;
@@ -32,7 +39,7 @@
                     
                 div(style="display:none")
                   input(type="hidden",id="roomid", value="#{roomid}")
-                  input(type="hidden",id="nickname", value="#{nickname}")
+                  input(ty  pe="hidden",id="nickname", value="#{nickname}")
                   input(type="hidden",id="lat", value="#{lat}")
                   input(type="hidden",id="lng", value="#{lng}")
                   input(type="hidden",id="color", value="#{color}")      
@@ -40,8 +47,8 @@
 #modal1.modal
     .modal-content
         
-        h3  wherearewe-express
-        p Where Are We (NodeJS - Express -SocketIO)
+        h3(style="color:brown")  WhereAreWe?-express
+        p Where Are We <br>(NodeJS - Express -SocketIO)
         
         h4 Learn
         p Práctica a título personal de NodeJS y Express
