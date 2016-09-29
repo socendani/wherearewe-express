@@ -1,84 +1,48 @@
-// var moongose= require("moongose");
+var mongoose = require('mongoose'),
+        Schema = mongoose.Schema;
 
-//var usuarios = new Array();
-
-var usuarios = {};
-var User = {};
-
-User.pintarComillas = function (id) {
-    return id;
-//    return "'" + id.toString() + "'";
+var usersSchema = new Schema({
+    _id: { type: Object, required: true, unique: true },  
+    nickname: {type: String, required: true},
+    color: {type: String, required: true},
+    room: {type: String}
+}, {
+    timestamps: true,
+    _id: false
 }
+);
 
 
-User.add = function (data) {
-    var hoy = new Date().toLocaleTimeString();
-
-    // usuarios[data.roomid].push(data.nickname);
-    // console.log("***add**");
-    room = this.pintarComillas(data.roomid);
-    nickname = this.pintarComillas(data.nickname);
-
-
-    usuarios[room] = {};
-    // usuarios[data.roomid] = new Array();
-    usuarios[room][nickname] = {
-        "nickname": data.nickname,
-        "createdAt": hoy
-    };
-//    console.log(usuarios);
-
-
-    // for (i = 1; i < 10; i++) {
-    //   var factor = Math.random() * 0.1;
-    //   la = 41.459 + factor;
-    //   lo = 2.2423 + factor;
-    //   nickname = this.pintarComillas(data.nickname + "_" + i);
-    //   usuarios[room][nickname] = {
-    //     "nickname": data.nickname,
-    //     "roomid": data.roomid,
-    //     "lat": la,
-    //     "long": lo,
-    //     "updateAt": new Date().toLocaleTimeString()
-    //   };
-    // };
-
-};
+usersSchema.pre('save', function (done) {
+    //No poden existir USUARIS que coincideixin en nickname+color+room
 
 
 
-User.update = function (data) {
-    // var hoy = new Date().toLocaleTimeString();
-
-    // // console.log("***update (1)**");
-    // usuarios[data.roomid.toString()] = new Array();
-    // usuarios[data.roomid.toString()][data.nickname.toString()] = {
-    //   "roomid": data.roomid,
-    //   "nickname": data.nickname,
-    //   "lat": data.lat,
-    //   "long": data.long,
-    //   "updateAt": hoy
-    // };
-
-    // console.log("***update (2)**");
-    // console.log(usuarios);
-};
+    this.updated_at = new Date();
+    done();
+});
 
 
 
-User.dameUsuarios = function (roomid) {
-    room = this.pintarComillas(roomid);
-//    console.log("+++++++++++++++ dame usuarios [" + room + "] +++++++++");
-    if (usuarios[room]) {
-//        console.log(usuarios[room]);
-        return usuarios;
-    } else {
-        return false;
-    }
-}
+//Nuestros MODELO
+var UserModel = mongoose.model('users', usersSchema);
+module.exports = UserModel;
+//
+//var users = function () {
+////module.exports = {
+//    function updateUser(room, cb) {
+//        RoomModel.find({name: room.name}, function (err, docs) {
+//            if (docs.length) {
+//                cb('Name exists already', null);
+//            } else {
+//                room.save(function (err) {
+//                    cb(err, room);
+//                });
+//            }
+//        });
+//    }
+//};
+//
+//module.exports = mongoose.model('users', usersSchema);
 
 
-// module.exports = rooms;
-module.exports = {
-    User: User
-};

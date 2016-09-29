@@ -1,65 +1,103 @@
+/*************** Requirements ***************/
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
+
 //var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 //var sessions = require('express-session');
 var cors = require("cors");
-var routes = require('./routes/index');
+var routes = require('./routes/routes');
 //var morgan = require('morgan');
 //Servidor
-var app = express();
+app = express();
 var server = require("http").Server(app); //for websocket
 var io = require("socket.io")(server); //for websocket
-var key_googlemaps = "";
+
+var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 
+var fs = require("fs");
+var sess;  //DMR:  https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
 
 
-// view engine setup
+/***** Globals del projecte **/
+app.locals.projecte = "";
+app.locals.version = "0.0";
+app.locals.key_googlemaps = "";
+
+/************ CONF OBJECT ***********/
+
+switch (app.get('env')) {
+    case "development":
+        var conf = {
+            mongo_ruta: "mongodb://localhost:27017/wherearewe",
+            secret: '076ee61d63aa10a125ea872411e433b9'
+        };
+        break;
+
+    default:
+        var conf = {
+            mongo_ruta: "mongodbXXXX://localhost:27017/wherearewe",
+            secret: 'XXXXCasdasddjasdlshaldkhaslkd'
+        };
+}
+
+
+/*************  DB Connection ***********/
+mongoose.Promise = global.Promise;
+// mongoose.set('debug', true);
+mongoose.connect(conf.mongo_ruta, function (err, res) {
+    if (err) {
+        console.log('ERROR: connecting to Database. ' + err);
+    }
+    console.log("Connection MongoDB ..OK  - Environtment: " + app.get('env'));
+});
+
+/************  CONFIGURE *************/
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-//app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(cors());
-//app.use(morgan('combined'))
-
-
-//Cookies: //http://expressjs.com/es/advanced/best-practice-security.html
 app.disable('x-powered-by');
-//var expiryDate = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-//app.use(sessions({
-//    secret: "PROBANDOLASSESIONES",
-//    resave: true,
-//    saveUninitialized: true,
-//    name: 'session',
-//    keys: ['key1', 'key2'],
-//    cookie: {
-//        // secure: true,
-//        maxAge: 1000 * 60 * 60,
-//        httpOnly: true,
-//        // domain: 'example.com',
-//        // path: 'foo/bar',
-//        expires: expiryDate
-//    }
-//
-//}));
-//Revisar si es necesario esto:
+app.use(session({
+    secret: conf.secret,
+    maxAge: new Date(Date.now() + 1000 * 60 * 60),  // 1 hour
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
+
+
+
+/**************    INIT *******************/
+fs.readFile('./package.json', 'utf8', function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+
+    if (data) {
+        obj = JSON.parse(data);
+        app.locals.version = obj.version;
+        app.locals.projecte = obj.name;
+        console.log("**********************************************************");
+        console.log("******        socendani                            *******");
+        console.log("         Project: " + app.locals.projecte + " - v. " + app.locals.version);
+        console.log("******                                             *******");
+        console.log("**********************************************************");
+    }
+});
+// important that this comes after session management
 app.use('/', routes);
-//Situación
-// var dmr_servidor = "http://localhost:3000";
 
-
-
-
-
+//START::
+//app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -79,6 +117,7 @@ if (app.get('env') === 'development') {
             error: err
         });
     });
+
 }
 
 // production error handler
@@ -89,7 +128,17 @@ app.use(function (err, req, res, next) {
         message: err.message,
         error: {}
     });
+
+
 });
+
+
+
+
+/************************  SOCKET.IO ************************/
+
+
+
 //TEST SOCKETS.io
 
 //https://scotch.io/tutorials/a-realtime-room-chat-app-using-node-webkit-socket-io-and-mean
@@ -123,49 +172,20 @@ io.on('connection', function (socket) {
         io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
         //eliminamos el usuario
         for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
-            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname)
-                    && (aplicacion[roomid].usuarios[i].color === socket.color)) {
+            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname) && (aplicacion[roomid].usuarios[i].color === socket.color)) {
                 aplicacion[roomid].usuarios.splice(i, 1);
                 aplicacion[roomid].total = aplicacion[roomid].total - 1;
             }
         }
         //emitimos usuarios
-//        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
-       
+        //        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
+
         fn("logout");
     });
-    function socketlog(socket, mensaje) {
-        console.log(socket.nickname + "::" + socket.roomid + ' => ' + mensaje);
 
-//        console.log("-- SOCKET --");
-//        console.log(socket);
-//        console.log("----------------------------------------------");
-//        console.log("------ Socket.roomid:" + socket.roomid);
-//        console.log("------ Socket.nickname:" + socket.nickname);
-//        console.log("------ Socket.lat:" + socket.lat);
-//        console.log("------ Socket.lng:" + socket.lng);
-//        console.log("------ Socket.time:" + socket.time);
-//        console.log("------ mensaje:" + mensaje);
-//        console.log("----------------------------------------------");
-    }
-
-//    io.sockets.map(function (e) {
-////            return e.nickname;
-//        console.log(e.nickname);
-//    })
-
-    function existeUser(roomid) {
-        for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
-            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname)
-                    && (aplicacion[roomid].usuarios[i].color === socket.color)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     socket.on('new-user', function (data, fn) {
-//Mantenmos la session socket con el usuario ... 
+        //Mantenmos la session socket con el usuario ... 
         socket.nickname = data.nickname.toLowerCase(); //esto .. no funciona¿?
         socket.roomid = data.roomid.toLowerCase();
         socket.color = data.color.toLowerCase();
@@ -175,13 +195,13 @@ io.on('connection', function (socket) {
         socket.join(socket.roomid); //join al ROOMID
         var hoy = new Date().toLocaleTimeString();
         var roomid = socket.roomid;
-        var usuario = {nickname: socket.nickname, color: socket.color, time: hoy};
+        var usuario = { nickname: socket.nickname, color: socket.color, time: hoy };
         if (!aplicacion[roomid]) {
             var room = {
                 "usuarios": [],
                 "total": 0
             };
-            Object.defineProperty(aplicacion, roomid, {value: room, writable: true, enumerable: true});
+            Object.defineProperty(aplicacion, roomid, { value: room, writable: true, enumerable: true });
         }
         //Un REFRESH de browsers
         if (!existeUser(roomid)) {
@@ -189,8 +209,8 @@ io.on('connection', function (socket) {
             aplicacion[roomid].total = aplicacion[roomid].total + 1;
         }
 
-//Callback client
-        fn({data: "ejemplo de uso de callback en socket.io"});
+        //Callback client
+        fn({ data: "ejemplo de uso de callback en socket.io" });
     });
     socket.on('user-join', function (data) {
         mensaje = ".... entrando en el mapa (" + socket.roomid + ")";
@@ -202,7 +222,7 @@ io.on('connection', function (socket) {
     //Nou missatge
     socket.on('new-message', function (mensaje) {
         socketlog(socket, mensaje);
-//        roomid = data.roomid;
+        //        roomid = data.roomid;
         // messages.push(data);
         // io.sockets.emit('messages', messages);
         io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
@@ -220,9 +240,23 @@ io.on('connection', function (socket) {
         }
         io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng, socket.color);
     });
+
+    /***********  Funciones useful for io   ************/
+    function socketlog(socket, mensaje) {
+        console.log(socket.nickname + "::" + socket.roomid + ' => ' + mensaje);
+    }
+
+    function existeUser(roomid) {
+        for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
+            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname) && (aplicacion[roomid].usuarios[i].color === socket.color)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function findClientsSocket(roomId, namespace) {
-        var res = []
-                , ns = io.of(namespace || "/"); // the default namespace is "/"
+        var res = [], ns = io.of(namespace || "/"); // the default namespace is "/"
 
         if (ns) {
             for (var id in ns.connected) {
@@ -240,4 +274,4 @@ io.on('connection', function (socket) {
     }
 
 });
-module.exports = {app: app, server: server};
+module.exports = { app: app, server: server };
