@@ -2,9 +2,9 @@
   div#nav-mobile.side-nav.fixed
     .row.center(style="margin:5px")
         h5.header.center Where are We
-        <b>#{nickname}</b>&nbsp;&nbsp;(<b>#{roomid}</b>)
+        <b>#{nickname}</b>&nbsp;&nbsp;(<b>#{room}</b>)
         form(method='post',onsubmit="return addMessage(this)",autocomplete="off",style="display:inline")
-            input(type="hidden",name="roomid",id="roomid",value="#{roomid}",autocomplete="off")
+            input(type="hidden",name="room",id="room",value="#{room}",autocomplete="off")
             input(type="hidden",name="nickname",id="nickname",value="#{nickname}",autocomplete="off")
 
             .search-wrapper.card(style="padding:5px")

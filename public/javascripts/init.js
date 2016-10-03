@@ -11,14 +11,14 @@ var yo;
 var wpid;
 var total_mensajes = 0;
 var nickname = document.getElementById("nickname").value.toLowerCase();
-var roomid = document.getElementById("roomid").value.toLowerCase();
+var room = document.getElementById("room").value.toLowerCase();
 var color = document.getElementById("color").value.toLowerCase();
 var socket = io.connect();
 var is_FirstPosition = true;
 
 function get_pos() {
     if (!!navigator.geolocation) {
-        wpid = navigator.geolocation.watchPosition(geo_success, geo_error, {enableHighAccuracy: true, maximumAge: 30000, timeout: 27000});
+        wpid = navigator.geolocation.watchPosition(geo_success, geo_error, { enableHighAccuracy: true, maximumAge: 30000, timeout: 27000 });
     } else {
         Materialize.toast("ERROR: Your Browser doesnt support the Geo Location API", 4000);
     }
@@ -29,7 +29,7 @@ function geo_success(position) {
     emitimosPosicion(position.coords.latitude, position.coords.longitude);
     if (is_FirstPosition) {
         initMap(position.coords.latitude, position.coords.longitude);
-//        emitimosPosicion(position.coords.latitude, position.coords.longitude);
+        //        emitimosPosicion(position.coords.latitude, position.coords.longitude);
         is_FirstPosition = false;
     }
 }
@@ -61,7 +61,7 @@ function geo_error(error) {
             msg = "Ocurrio un error desconocido.";
             break;
     }
-    ;
+
     Materialize.toast(msg, 4000);
 }
 
@@ -83,17 +83,19 @@ function salir(data) {
 
 $(document).ready(function () {
     pintar_mensajes();
-//Inicio de emision
-    socket.emit("new-user", {nickname: nickname, roomid: roomid, color: color}, function (data) {
-        socket.emit("user-join", data);
-    });
-//    socket.emit('new-message', {nickname: nickname, roomid: roomid, text: nickname + " entrando en sala"});
+    //Inicio de emision
+    socket.emit("user-join", null);
 
-//    setInterval('emitimosPosicion()', 50000);
+    setInterval(function () {
+        console.log("-- petición de: position-request");
+        socket.emit("position-request", function (data) {
+            console.log(data);
+        });
+    }, 10000);
 
     $('.modal-trigger').leanModal();
 
-    $('.button-collapse').sideNav({'edge': 'left'});
+    $('.button-collapse').sideNav({ 'edge': 'left' });
 
     $("#btnLogout").on("click", function () {
         socket.emit("user-left", "salir", salir);

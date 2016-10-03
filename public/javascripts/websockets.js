@@ -16,45 +16,49 @@ socket.on('disconnect', function () {
     }, 5000);
 
 });
+
+
+
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
-//    console.log("messages-cli: " + usuario + " - " + mensaje);
+   console.log("messages-cli: " + usuario + " - " + mensaje);
 
     if (mensaje.indexOf("entrando en el mapa")>=0) {
          Materialize.toast(usuario+mensaje, 4000);
     }
     showIconSender();
     actualizarChat(usuario, mensaje);
-})
+});
+
+
 
 //Pintar usuarios 
-socket.on('usuarios', function (usuarios, total) {
-    var html = usuarios.map(function (obj, index) {
-        chat_user = "chat-user";
-        if (nickname == obj.nickname) {
-            chat_user = "chat-user-me";
-        }
-//        console.log("usaurio => " + obj.nickname + "=" + obj.color);
+// socket.on('usuarios', function (usuarios, total) {
+//     var html = usuarios.map(function (obj, index) {
+//         chat_user = "chat-user";
+//         if (nickname == obj.nickname) {
+//             chat_user = "chat-user-me";
+//         }
+// //        console.log("usaurio => " + obj.nickname + "=" + obj.color);
 
-        label = obj.nickname.charAt(0).toUpperCase();
-        return ('<div  class="cuadro_user" style="background-color:#' + obj.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + obj.nickname + '</b></div>');
-    }).join("<br>");
+//         label = obj.nickname.charAt(0).toUpperCase();
+//         return ('<div  class="cuadro_user" style="background-color:#' + obj.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + obj.nickname + '</b></div>');
+//     }).join("<br>");
 
-    document.getElementById('totalusuarios').innerHTML = total;
-    document.getElementById('usuarios').innerHTML = html;
-//    console.log(usuarios);
-});
+//     document.getElementById('totalusuarios').innerHTML = total;
+//     document.getElementById('usuarios').innerHTML = html;
+// //    console.log(usuarios);
+// });
 
 socket.on('force-posicion', function () {
     emitimosPosicion();
 });
 
-socket.on('posicion', function (nickname, lat, lng, color) {
-//    var msg = "messages-cli: " + nickname + ". lat: " + lat + ", lng: " + lng + ", color: " + color;
-//    Materialize.toast(msg, 2000);
-//    console.log(msg);
+socket.on('position-markers', function (markersObject) {
+    // console.log("posicion-cliente::.");
+    // console.log(data);
     showIconSender();
-    actualizarMapa(nickname, lat, lng, color);
+    actualizarMapa(markersObject);
 })
 
 
@@ -83,7 +87,7 @@ function actualizarUsuarios(usuario, mensaje) {
 }
 
 function actualizarChat(usuario, mensaje) {
-//    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);
+   console.log("actualizarChat********** => " + usuario + "=" + mensaje);
     chat_user = "chat-user";
     if (nickname == usuario) {
         chat_user = "chat-user-me";
@@ -92,7 +96,7 @@ function actualizarChat(usuario, mensaje) {
     } else {
         total_mensajes++;
     }
-    html = '<div class="' + chat_user + '"><b>' + usuario + ':</b><em>' + mensaje + '</em></div>';
+    html = '<div class="' + chat_user + '"><b>' + usuario + ': </b><em>' + mensaje + '</em></div>';
     $('#messages').prepend(html);
     pintar_mensajes();
 //    Materialize.toast(html, 4000);
@@ -101,12 +105,12 @@ function actualizarChat(usuario, mensaje) {
 
 function addMessage() {
 //    var message = {
-//        roomid: document.getElementById('roomid').value,
+//        room: document.getElementById('room').value,
 //        nickname: document.getElementById('nickname').value,
 //        text: document.getElementById('texto').value
 //    };
     mensaje = document.getElementById('texto').value;
-    socket.emit('new-message', mensaje);
+    socket.emit('message-new', mensaje);
     document.getElementById('texto').value = "";
     document.getElementById('texto').focus();
     return false;

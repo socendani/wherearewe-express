@@ -1,0 +1,27 @@
+extends layout/login
+  
+
+block content
+
+  //- script.
+  //-     function capitalize(s) { return "pp"+s };
+
+  h5 Users
+  ul
+  each user in users
+      li <b>[#{user.room}]</b> [#{(user.nickname)}] [#{(user.color)}]  (#{user.lat},#{user.lng})
+
+  h5 Mensajes
+  ul
+  each mensaje in mensajes
+      li <b>[#{mensaje.room}]</b> [#{(mensaje.nickname)}] [#{(mensaje.color)}] #{mensaje.mensaje} (#{mensaje.fecha})
+
+  h5 Logs
+  ul
+  each log in logs
+      li <b>[#{(log.level)}] [#{log.room}]</b> [#{(log.nickname)}] #{log.description} (#{log.fecha})
+
+  script.
+    setInterval(function() {location.reload();} , 10000);
+
+  
