@@ -58,9 +58,9 @@ auditSchema.methods.cleanLogs = function (horas) {
     var start = new Date(new Date().getTime() - (horas * 60 * 60 * 1000));
     audit.remove({
         "createdAt": {
-            "$gte": start
+            "$lte": start
         }
-    });
+    }).remove().exec();
 };
 
 

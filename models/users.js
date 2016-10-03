@@ -32,12 +32,24 @@ usersSchema.methods.getUsersFromRoom = function (room_name, cb) {
 };
 
 usersSchema.methods.showUsers = function (howmany, cb) {
-    UserModel.find({}, function(err, obj){
-         if (err)  return cb(err);
-         cb(null,obj);
+    UserModel.find({}, function (err, obj) {
+        if (err) return cb(err);
+        cb(null, obj);
     }).sort([['updatedAt', 'descending']]).limit(howmany);
 
 };
+
+usersSchema.methods.cleanUsers = function (horas) {
+    if (horas === undefined) horas = 3;
+    var start = new Date(new Date().getTime() - (horas * 60 * 60 * 1000));
+    // console.log(start);
+    UserModel.find({
+        "createdAt": {
+            "$lte": start
+        }
+    }).remove().exec();
+};
+
 
 
 

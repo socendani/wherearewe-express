@@ -24,6 +24,16 @@ io.on('connection', function (socket) {
   });
 
 
+  socket.on("disconnect", function(){
+    socketlog(socket, "server-side: disconnect");
+    users.findOneAndRemove({ "_id": socket.sid }, function (error, doc, result) {
+            if (error) return audit.error(error);
+            audit.log(doc.nickname + " disconnect de  " + doc.room);
+            // req.session.destroy();
+            // res.redirect("/");
+        });
+  });
+
   /****************  MENSAJES    *********************/
   socket.on('user-join', function (data, fn) {
     mensaje = "... entrando en mapa.";
@@ -46,8 +56,6 @@ io.on('connection', function (socket) {
     });
     //     //emitimos usuarios
     //     //        io.sockets.in(socket.room).emit('usuarios', aplicacion[socket.room].usuarios, aplicacion[socket.room].total);
-
-
   });
 
 

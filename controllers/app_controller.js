@@ -31,6 +31,7 @@ module.exports = {
         audit.cleanLogs(24);
         var mensajes = require('../models/mensajes.js');
         var m = new mensajes().cleanMensajes(5);
+        var u = new users().cleanUsers(2);
 
 
         //Renderizamos la VISTA

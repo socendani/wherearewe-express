@@ -39,9 +39,9 @@ mensajesSchema.methods.cleanMensajes = function (horas) {
     var start = new Date(new Date().getTime() - (horas * 60 * 60 * 1000));
     MensajeModel.remove({
         "createdAt": {
-            "$gte": start
+            "$lte": start
         }
-    });
+    }).remove().exec();
 };
 
 

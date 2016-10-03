@@ -62,12 +62,12 @@ switch (app.get('env')) {
 
 
 /*************  DB Connection ***********/
+mongoose.Promise = global.Promise;
 var mongoStore = new MongoStore({   //useful in io.socket FOR access to Session collection
     mongooseConnection: mongoose.connection
 });
 
 
-mongoose.Promise = global.Promise;
 // mongoose.set('debug', true);
 mongoose.connect(conf.mongo_ruta, function (err, res) {
     if (err) {
@@ -88,6 +88,9 @@ app.use(cors());
 app.disable('x-powered-by');
 app.use(session({
     secret: conf.secret,
+    proxy: true,
+    resave: true,
+    saveUninitialized: true,
     maxAge: new Date(Date.now() + 1000 * 60 * 60),  // 1 hour
     store: mongoStore
 }));
