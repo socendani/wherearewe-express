@@ -15,6 +15,7 @@ var routes = require('./routes/routes');
 app = express();
 var server = require("http").Server(app); //for websocket
 var io = require("socket.io")(server); //for websocket
+// require("../controllers/io_controller.js"); //for module of io I/O
 
 var mongoose = require('mongoose');
 var session = require('express-session');
@@ -22,7 +23,11 @@ var MongoStore = require('connect-mongo')(session);
 
 
 var fs = require("fs");
+/************  MODULES USES IN PROJECT  ************/
 var sess;  //DMR:  https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
+var users = require('./models/users.js');
+var audit = require('./models/audit.js');
+var mensajes = require('./models/mensajes.js');
 
 
 /***** Globals del projecte **/
@@ -32,23 +37,36 @@ app.locals.key_googlemaps = "";
 
 /************ CONF OBJECT ***********/
 
+// var fs = require('fs'),
+// configPath = './config.json';
+// var parsed = JSON.parse(fs.readFileSync(configPath, 'UTF-8'));
+// exports.conf=parsed;
+
 switch (app.get('env')) {
     case "development":
+        require('./config/config.js');
         var conf = {
-            mongo_ruta: "mongodb://localhost:27017/wherearewe",
-            secret: '076ee61d63aa10a125ea872411e433b9'
+            mongo_ruta: process.env.mongo_ruta,
+            secret: process.env.secret
         };
         break;
 
-    default:
+    default: //https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-config-vars
+
         var conf = {
-            mongo_ruta: "mongodbXXXX://localhost:27017/wherearewe",
-            secret: 'XXXXCasdasddjasdlshaldkhaslkd'
+            mongo_ruta: process.env.mongo_ruta,
+            secret: process.env.secret
         };
 }
 
 
+
 /*************  DB Connection ***********/
+var mongoStore = new MongoStore({   //useful in io.socket FOR access to Session collection
+    mongooseConnection: mongoose.connection
+});
+
+
 mongoose.Promise = global.Promise;
 // mongoose.set('debug', true);
 mongoose.connect(conf.mongo_ruta, function (err, res) {
@@ -71,7 +89,7 @@ app.disable('x-powered-by');
 app.use(session({
     secret: conf.secret,
     maxAge: new Date(Date.now() + 1000 * 60 * 60),  // 1 hour
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: mongoStore
 }));
 
 
@@ -135,9 +153,11 @@ app.use(function (err, req, res, next) {
 
 
 
-/************************  SOCKET.IO ************************/
+/************************ INCLUDE  SOCKET.IO  (for code clearly) ************************/
+eval(require('fs').readFileSync('./controllers/io_controller.js', 'utf8'));
 
 
+module.exports = { app: app, server: server };
 
 //TEST SOCKETS.io
 
@@ -148,11 +168,11 @@ app.use(function (err, req, res, next) {
 //Lògica de Servidor
 
 //var messages = [];
-var users = [];
-var usuarios = {};
-var aplicacion = {};
-var projecte = "";
-var version = "0.0";
+// var users = [];
+// var usuarios = {};
+// var aplicacion = {};
+// var projecte = "";
+// var version = "0.0";
 
 //function sessionCleanup() {
 //    sessionStore.all(function (err, sessions) {
@@ -163,115 +183,120 @@ var version = "0.0";
 //}
 
 //var User = require("./models/users.js").User;
-io.on('connection', function (socket) {
+// io.on('connection', function (socket) {
+//     socket.on('new-user', function (data, fn) {
 
-    socket.on('user-left', function (data, fn) {
-        var roomid = socket.roomid;
-        mensaje = "... saliendo del mapa (" + socket.roomid + ")";
-        socketlog(socket, mensaje);
-        io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-        //eliminamos el usuario
-        for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
-            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname) && (aplicacion[roomid].usuarios[i].color === socket.color)) {
-                aplicacion[roomid].usuarios.splice(i, 1);
-                aplicacion[roomid].total = aplicacion[roomid].total - 1;
-            }
-        }
-        //emitimos usuarios
-        //        io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
+//         console.log("NEWWWWWWWWWWW-USER: "+data);
 
-        fn("logout");
-    });
+        // //Mantenmos la session socket con el usuario ... 
+        // socket.nickname = data.nickname.toLowerCase(); //esto .. no funciona¿?
+        // socket.room = data.room.toLowerCase();
+        // socket.color = data.color.toLowerCase();
+        // socket.lat = 0;
+        // socket.lng = 0;
+        // socket.time = 0;
+        // socket.join(socket.room); //join al room
+        // var hoy = new Date().toLocaleTimeString();
+        // var room = socket.room;
+        // var usuario = { nickname: socket.nickname, color: socket.color, time: hoy };
+        // if (!aplicacion[room]) {
+        //     var room = {
+        //         "usuarios": [],
+        //         "total": 0
+        //     };
+        //     Object.defineProperty(aplicacion, room, { value: room, writable: true, enumerable: true });
+        // }
+        // //Un REFRESH de browsers
+        // if (!existeUser(room)) {
+        //     aplicacion[room].usuarios.push(usuario);
+        //     aplicacion[room].total = aplicacion[room].total + 1;
+        // }
+
+        // //Callback client
+        // fn({ data: "ejemplo de uso de callback en socket.io" });
+    // });
 
 
-    socket.on('new-user', function (data, fn) {
-        //Mantenmos la session socket con el usuario ... 
-        socket.nickname = data.nickname.toLowerCase(); //esto .. no funciona¿?
-        socket.roomid = data.roomid.toLowerCase();
-        socket.color = data.color.toLowerCase();
-        socket.lat = 0;
-        socket.lng = 0;
-        socket.time = 0;
-        socket.join(socket.roomid); //join al ROOMID
-        var hoy = new Date().toLocaleTimeString();
-        var roomid = socket.roomid;
-        var usuario = { nickname: socket.nickname, color: socket.color, time: hoy };
-        if (!aplicacion[roomid]) {
-            var room = {
-                "usuarios": [],
-                "total": 0
-            };
-            Object.defineProperty(aplicacion, roomid, { value: room, writable: true, enumerable: true });
-        }
-        //Un REFRESH de browsers
-        if (!existeUser(roomid)) {
-            aplicacion[roomid].usuarios.push(usuario);
-            aplicacion[roomid].total = aplicacion[roomid].total + 1;
-        }
+    // socket.on('user-left', function (data, fn) {
+    //     var room = socket.room;
+    //     mensaje = "... saliendo del mapa (" + socket.room + ")";
+    //     socketlog(socket, mensaje);
+    //     io.sockets.in(socket.room).emit('messages', socket.nickname, mensaje);
+    //     //eliminamos el usuario
+    //     for (var i = 0; i < aplicacion[room].usuarios.length; i++) {
+    //         if ((aplicacion[room].usuarios[i].nickname === socket.nickname) && (aplicacion[room].usuarios[i].color === socket.color)) {
+    //             aplicacion[room].usuarios.splice(i, 1);
+    //             aplicacion[room].total = aplicacion[room].total - 1;
+    //         }
+    //     }
+    //     //emitimos usuarios
+    //     //        io.sockets.in(socket.room).emit('usuarios', aplicacion[socket.room].usuarios, aplicacion[socket.room].total);
 
-        //Callback client
-        fn({ data: "ejemplo de uso de callback en socket.io" });
-    });
-    socket.on('user-join', function (data) {
-        mensaje = ".... entrando en el mapa (" + socket.roomid + ")";
-        socketlog(socket, mensaje);
-        socket.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-        //FORZAMOS a que todos los clientes NOS envíen su posición
-        io.sockets.in(socket.roomid).emit('force-posicion');
-    });
-    //Nou missatge
-    socket.on('new-message', function (mensaje) {
-        socketlog(socket, mensaje);
-        //        roomid = data.roomid;
-        // messages.push(data);
-        // io.sockets.emit('messages', messages);
-        io.sockets.in(socket.roomid).emit('messages', socket.nickname, mensaje);
-    });
+    //     fn("logout");
+    // });
 
 
 
+    // socket.on('user-join', function (data) {
+    //     mensaje = ".... entrando en el mapa (" + socket.room + ")";
+    //     socketlog(socket, mensaje);
+    //     socket.in(socket.room).emit('messages', socket.nickname, mensaje);
+    //     //FORZAMOS a que todos los clientes NOS envíen su posición
+    //     io.sockets.in(socket.room).emit('force-posicion');
+    // });
+    // //Nou missatge
+    // socket.on('new-message', function (mensaje) {
+    //     socketlog(socket, mensaje);
+    //     //        room = data.room;
+    //     // messages.push(data);
+    //     // io.sockets.emit('messages', messages);
+    //     io.sockets.in(socket.room).emit('messages', socket.nickname, mensaje);
+    // });
 
-    socket.on('update-position', function (lat, lng) {
-        //un usuario Actualiza SU posición y emitimos a todos los datos de ESE usuario
-        mensaje = "mensaje-server: lat: " + lat + ", lng: " + lng;
-        socketlog(socket, mensaje);
-        if (socket.roomid !== undefined) {
-            io.sockets.in(socket.roomid).emit('usuarios', aplicacion[socket.roomid].usuarios, aplicacion[socket.roomid].total);
-        }
-        io.sockets.in(socket.roomid).emit('posicion', socket.nickname, lat, lng, socket.color);
-    });
 
-    /***********  Funciones useful for io   ************/
-    function socketlog(socket, mensaje) {
-        console.log(socket.nickname + "::" + socket.roomid + ' => ' + mensaje);
-    }
 
-    function existeUser(roomid) {
-        for (var i = 0; i < aplicacion[roomid].usuarios.length; i++) {
-            if ((aplicacion[roomid].usuarios[i].nickname === socket.nickname) && (aplicacion[roomid].usuarios[i].color === socket.color)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    function findClientsSocket(roomId, namespace) {
-        var res = [], ns = io.of(namespace || "/"); // the default namespace is "/"
+    // socket.on('update-position', function (lat, lng) {
+    //     //un usuario Actualiza SU posición y emitimos a todos los datos de ESE usuario
+    //     mensaje = "mensaje-server: lat: " + lat + ", lng: " + lng;
+    //     socketlog(socket, mensaje);
+    //     if (socket.room !== undefined) {
+    //         io.sockets.in(socket.room).emit('usuarios', aplicacion[socket.room].usuarios, aplicacion[socket.room].total);
+    //     }
+    //     io.sockets.in(socket.room).emit('posicion', socket.nickname, lat, lng, socket.color);
+    // });
 
-        if (ns) {
-            for (var id in ns.connected) {
-                if (roomId) {
-                    var index = ns.connected[id].rooms.indexOf(roomId);
-                    if (index !== -1) {
-                        res.push(ns.connected[id]);
-                    }
-                } else {
-                    res.push(ns.connected[id]);
-                }
-            }
-        }
-        return res;
-    }
+    // /***********  Funciones useful for io   ************/
+    // function socketlog(socket, mensaje) {
+    //     console.log(socket.nickname + "::" + socket.room + ' => ' + mensaje);
+    // }
 
-});
-module.exports = { app: app, server: server };
+    // function existeUser(room) {
+    //     for (var i = 0; i < aplicacion[room].usuarios.length; i++) {
+    //         if ((aplicacion[room].usuarios[i].nickname === socket.nickname) && (aplicacion[room].usuarios[i].color === socket.color)) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    // function findClientsSocket(room, namespace) {
+    //     var res = [], ns = io.of(namespace || "/"); // the default namespace is "/"
+
+    //     if (ns) {
+    //         for (var id in ns.connected) {
+    //             if (room) {
+    //                 var index = ns.connected[id].rooms.indexOf(room);
+    //                 if (index !== -1) {
+    //                     res.push(ns.connected[id]);
+    //                 }
+    //             } else {
+    //                 res.push(ns.connected[id]);
+    //             }
+    //         }
+    //     }
+    //     return res;
+    // }
+
+// });
+

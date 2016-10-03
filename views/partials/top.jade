@@ -38,7 +38,7 @@
                                  i.material-icons settings_power
                     
                 div(style="display:none")
-                  input(type="hidden",id="roomid", value="#{roomid}")
+                  input(type="hidden",id="room", value="#{room}")
                   input(type="hidden",id="nickname", value="#{nickname}")
                   input(type="hidden",id="lat", value="#{lat}")
                   input(type="hidden",id="lng", value="#{lng}")
@@ -47,17 +47,18 @@
 #modal1.modal
     .modal-content
         
-        h3(style="color:brown")  WhereAreWe?-express
-        p Where Are We <br>(NodeJS - Express -SocketIO)
+        h3(style="color:brown")  WhereAreWe-express
+        p Where Are We <br>(NodeJS - Express -SocketIO - MongoDB)
         
         h4 Learn
-        p Práctica a título personal de NodeJS y Express
+        p Práctica a título personal de MongoDB, NodeJS y Express
         
         h4 Tecnologías
         p Para esta práctica se ha utilizado.
         ul
          li NodeJS
          li ExpressJS
+         li MongoDB (mongoose)
          li Socket.io
          li Jade Engine
          li MaterializeCSS
@@ -66,10 +67,10 @@
          li bower y gulp
          li heroku deploy vía Github
          
-        h4 Sin base de datos
-        span El primer objetivo es realizar un sistema en tiempo real (chat y geolocalización) muy muy simple y efímero. 
+        h4 Con base de datos (a partir de v2.x)
+        span El objetivo es realizar un sistema en tiempo real (chat y geolocalización) muy  simple y efímero. 
         br 
-        span No se utiliza base de datos alguna, ni acumulación de mensajes ni siquiera variables de session para evitar <b>memory leaks</b> de node.js, al mismo tiempo que se pretende mantener multiples <b>Rooms</b> sin solapamiento de mensajes ni coordenadas.
+        span En la v1 no se utiliza base de datos, pero daba problemas de <b>memory leaks</b> de node.js. En la versión v2 se integra con MongoDB.
         
         h4 Author
         span Dani Morte (@socendani) <socendani AT gmail dot com>  <br>

@@ -1,16 +1,15 @@
 var express = require('express');
 var router = express.Router();
-
+var controller = require("../controllers/app_controller");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('login', {
-        //        fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
+        fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
         color: Math.floor(Math.random() * 16777215).toString(16),
         nickname: "Pon un nick",
-        roomid: req.session.roomid || "agora",
+        room: req.session.room || "agora",
         version: req.app.locals.version
-        // title: projecte +" " + version
     });
     //    next();
 });
@@ -18,7 +17,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/login', function (req, res, next) {
     req.session.nickname = require('querystring').escape(req.body.nickname.toLowerCase());
-    req.session.roomid = require('querystring').escape(req.body.roomid.toLowerCase());
+    req.session.room = require('querystring').escape(req.body.room.toLowerCase());
     req.session.color = req.body.color.toLowerCase().substr(1); //quitamos almohadilla
     //Si todo es OK.. vamos a la room
     //    console.log(req.session);
@@ -26,8 +25,6 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get('/logout', function (req, res, next) {
-
-    var controller = require("../controllers/room_controller");
     controller.logout(res, req);
     // req.session.destroy();
     // res.redirect("/");
@@ -38,22 +35,56 @@ router.get('/logout', function (req, res, next) {
 //    res.redirect("/");
 //});
 router.get('/room/:habitacion?', isAuthenticated, function (req, res, next) {
-    if (req.params.roomid !== undefined) {
-        req.session.roomid = require('querystring').escape(req.params.roomid.toLowerCase());
+    if (req.params.room !== undefined) {
+        req.session.room = require('querystring').escape(req.params.room.toLowerCase());
     }
-    var controller = require("../controllers/room_controller");
+
     controller.init(res, req);
 });
 
-router.get('/logs/', isAuthenticated, function (req, res, next) {
+router.get('/tafanera/', function (req, res, next) {
     var audit = require('../models/audit.js');
-    audit.showLogs(100, function (err, logs) {
+    var mensajes = require('../models/mensajes.js');
+    var users = require('../models/users.js');
+    var estadisticas = 0;
 
-        res.render('logs', {
-            err: err,
-            logs: logs
-        });
+    var mis_logs, mis_mensajes, mis_users;
+
+    audit.showLogs(30, function (error, logs) {
+        if (error) return console.error(error);
+        estadisticas++;
+        mis_logs=logs;
+        mostrarView();
     });
+
+    var m = new mensajes();
+    m.showMensajes(30, function (error, mensajes) {
+        if (error) return console.error(error);
+        estadisticas++;
+        mis_mensajes=mensajes;
+        mostrarView();
+    });
+    
+    var u = new users();
+    u.showUsers(100, function (error, users) {
+        if (error) return console.error(error);
+        estadisticas++;
+        mis_users=users;
+        mostrarView();
+    });
+
+   
+    function mostrarView() {
+        // console.log("Estadísticas: " + estadisticas);
+        if (estadisticas == 3) {
+            res.render('tafanera', {
+                mensajes: mis_mensajes,
+                users: mis_users,
+                logs: mis_logs
+            });
+        }
+    }
+
 
 
 
@@ -64,7 +95,7 @@ router.get('/logs/', isAuthenticated, function (req, res, next) {
 ////    next();
 //});
 //router.get('/room/:habitacion', function (req, res, next) {
-//    req.session.roomid = require('querystring').escape(req.params.roomid.toLowerCase());
+//    req.session.room = require('querystring').escape(req.params.room.toLowerCase());
 //    res.redirect('/');
 ////    next();
 //});
@@ -73,16 +104,16 @@ router.get('/logs/', isAuthenticated, function (req, res, next) {
 
 ///////////////////************  PRIVATE *************************/ç
 function url_show(req) {
-    //    return "/room/" + req.session.roomid + "/" + req.session.nickname + "/" + req.session.color;
-    return "/room/" + req.session.roomid;
+    //    return "/room/" + req.session.room + "/" + req.session.nickname + "/" + req.session.color;
+    return "/room/" + req.session.room;
 }
 
 //MiddleWare de autenticación
 function isAuthenticated(req, res, next) {
 
-    //    req.session.roomid =  req.params.habitacion.toLowerCase();
-    if ((!req.session.roomid) && (req.params.roomid != undefined)) {
-        req.session.roomid = require('querystring').escape(req.params.roomid.toLowerCase());
+    //    req.session.room =  req.params.habitacion.toLowerCase();
+    if ((!req.session.room) && (req.params.room != undefined)) {
+        req.session.room = require('querystring').escape(req.params.room.toLowerCase());
     }
     if ((!req.session.nickname) && (req.params.nickname != undefined)) {
         req.session.nickname = require('querystring').escape(req.params.nickname.toLowerCase());
@@ -96,7 +127,7 @@ function isAuthenticated(req, res, next) {
         req.session.color = color.toLowerCase();
     }
 
-    if ((!req.session.roomid) || (!req.session.nickname) || (!req.session.color)) {
+    if ((!req.session.room) || (!req.session.nickname) || (!req.session.color)) {
         res.redirect('/');
     } else {
         return next();

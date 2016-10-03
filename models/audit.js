@@ -31,6 +31,15 @@ auditSchema.methods.log = function (mensaje, level) {
         if (err)  console.log(err);
     });
 };
+auditSchema.methods.error = function (mensaje) {
+
+    console.log("ERROR : "+mensaje);
+    this.level = "ERROR";
+    this.description = mensaje;
+    this.save(function (err, obj) {
+        if (err)  console.log(err);
+    });
+};
 
 auditSchema.methods.purgeCollection = function (howmany) {
     //TODO: Delete ALL items EXCEPTS howmany
@@ -38,10 +47,20 @@ auditSchema.methods.purgeCollection = function (howmany) {
 
 auditSchema.methods.showLogs = function (howmany, cb) {
     audit.find({}, function(err, obj){
-         if (err)  return cb(user.nickname + " NO se ha unido en " + obj.name);
+         if (err)  return cb(err);
          cb(null,obj);
-    }).sort([['updatedAt', 'descending']]);
+    }).sort([['updatedAt', 'descending']]).limit(howmany);
 
+};
+
+auditSchema.methods.cleanLogs = function (horas) {
+    if (horas===undefined) horas=10;
+    var start = new Date(new Date().getTime() - (horas * 60 * 60 * 1000));
+    audit.remove({
+        "createdAt": {
+            "$gte": start
+        }
+    });
 };
 
 

@@ -1,14 +1,15 @@
 # wherearewe-express
-Where Are We (NodeJS - Express -SocketIO)
+Where Are We (NodeJS - Express -SocketIO - MongoDB)
 
 ## Learn
-Práctica a título personal de NodeJS y Express
+Práctica a título personal de MongoDB, NodeJS y Express
 
 ## Tecnologias
 Para esta práctica se ha utilizado.
 . NodeJS
 . ExpressJS
 . Socket.io
+. MongoDB (mongoose)
 . Jade Engine
 . MaterializeCSS
 . SASS
@@ -16,9 +17,9 @@ Para esta práctica se ha utilizado.
 . bower y gulp
 . heroku deploy vía Github
 
-## Sin base de datos
-El primer objetivo es realizar un sistema en tiempo real (chat y geolocalización) muy muy simple y efímero. 
-No se utiliza base de datos alguna, ni acumulación de mensajes ni siquiera variables de session para evitar memory leaks de node.js, al mismo tiempo que se pretende mantener multiples Rooms sin solapamiento de mensajes ni coordenadas.
+## Con base de datos (a partir de v2.x)
+El objetivo es realizar un sistema en tiempo real (chat y geolocalización) muy simple.
+En la v1 no se utiliza base de datos, pero daba problemas de <b>memory leaks</b> de node.js. En la versión v2 se integra con MongoDB.
 
 ## Author
 Dani Morte (@socendani) <socendani AT gmail dot com>
