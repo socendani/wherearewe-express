@@ -19,6 +19,8 @@ io.on('connection', function (socket) {
     //JOIN del canal.
     socket.join(socket.room);
 
+    
+
   });
 
 
@@ -90,9 +92,9 @@ io.on('connection', function (socket) {
 
   // /***********  Funciones useful for io   ************/
   function socketlog(socket, mensaje) {
-    // var m = socket.nickname + "::" + socket.room + ' => ' + mensaje;
+    // var m = socket.nickname + "::" + socket.room + ' - > ' + mensaje;
     // console.log(m);
-    // audit.log(m);
+    audit.log(mensaje);
   }
 
 

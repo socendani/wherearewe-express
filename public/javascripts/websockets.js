@@ -9,8 +9,8 @@ socket.on('connect', function () {
 });
 socket.on('disconnect', function () {
     console.info('connection lost..');
-    html = "<h3>Se ha perdido <br>la conexión .. reload en 5 segundos!</h3>";
-    Materialize.toast(html, 3000);
+    html = "<h5>Se ha perdido la conexión</h5><p> .. reload en 5 segundos!</p>";
+    Materialize.toast(html, 4000);
     setTimeout(function () {
         location.reload();
     }, 5000);
@@ -21,7 +21,7 @@ socket.on('disconnect', function () {
 
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
-   console.log("messages-cli: " + usuario + " - " + mensaje);
+//    console.log("messages-cli: " + usuario + " - " + mensaje);
 
     if (mensaje.indexOf("entrando en el mapa")>=0) {
          Materialize.toast(usuario+mensaje, 4000);
@@ -71,7 +71,7 @@ function showIconSender() {
     $("#iconsender").show();
     setTimeout(function () {
         $("#iconsender").hide();
-    }, 2000);
+    }, 1000);
 }
 function actualizarUsuarios(usuario, mensaje) {
 //    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);
@@ -87,7 +87,7 @@ function actualizarUsuarios(usuario, mensaje) {
 }
 
 function actualizarChat(usuario, mensaje) {
-   console.log("actualizarChat********** => " + usuario + "=" + mensaje);
+//    console.log("actualizarChat********** => " + usuario + "=" + mensaje);
     chat_user = "chat-user";
     if (nickname == usuario) {
         chat_user = "chat-user-me";

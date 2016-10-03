@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
     res.render('login', {
         fraseboton: (req.session.nickname) ? "Cambiar" : "Entrar",
         color: Math.floor(Math.random() * 16777215).toString(16),
-        nickname: "Pon un nick",
+        nickname: "Escribe tu nombre",
         room: req.session.room || "agora",
         version: req.app.locals.version
     });
@@ -34,13 +34,18 @@ router.get('/logout', function (req, res, next) {
 //router.get('/room/:habitacio', null, function (req, res, next) {
 //    res.redirect("/");
 //});
-router.get('/room/:habitacion?', isAuthenticated, function (req, res, next) {
+router.get('/room/:room?', isAuthenticated, function (req, res, next) {
     if (req.params.room !== undefined) {
         req.session.room = require('querystring').escape(req.params.room.toLowerCase());
     }
-
     controller.init(res, req);
 });
+// router.get('/room/:room?/:nickname?', isAuthenticated, function (req, res, next) {
+//     if (req.params.room !== undefined) {
+//         req.session.room = require('querystring').escape(req.params.room.toLowerCase());
+//     }
+//     controller.init(res, req);
+// });
 
 router.get('/tafanera/', function (req, res, next) {
     var audit = require('../models/audit.js');

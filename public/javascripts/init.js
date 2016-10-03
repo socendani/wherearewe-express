@@ -87,11 +87,11 @@ $(document).ready(function () {
     socket.emit("user-join", null);
 
     setInterval(function () {
-        console.log("-- petición de: position-request");
+        // console.log("-- petición de: position-request");
         socket.emit("position-request", function (data) {
             console.log(data);
         });
-    }, 10000);
+    }, 3000);
 
     $('.modal-trigger').leanModal();
 

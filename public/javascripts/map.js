@@ -26,7 +26,7 @@ function emitimosPosicion(lat, lng) {
     if (lat == "undefined")
         return false;
 
-    console.log("(emitimosPosicion) nueva posicion: " + lat + "," + lng);
+    // console.log("(emitimosPosicion) nueva posicion: " + lat + "," + lng);
     socket.emit('position-update', lat, lng);
     document.getElementById("lat").value = lat;
     document.getElementById("lng").value = lng;
@@ -37,7 +37,7 @@ function emitimosPosicion(lat, lng) {
 function addMarker(nickname, lat, lng, color, map) {
     if (!lat)
         return false;
-       console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
+    //    console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
     is_me = (document.getElementById("nickname").value == nickname) ? true : false;
     //    var infowindow = new google.maps.InfoWindow({
     //        content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
@@ -95,9 +95,18 @@ function actualizarMapa(markersObject) {
     }
     markers = [];
     //Els tornem a afegir
-    markersObject.forEach(function (element, index) {
+    total_usuarios=0;html="";
+    markersObject.forEach(function (element, index) {  //syncrónico
         addMarker(element.nickname, parseFloat(element.lat), parseFloat(element.lng), element.color, map);
+
+        //Actualizamos el contador de usuarios y el listado
+        total_usuarios++;
+        label = element.nickname.charAt(0).toUpperCase();
+        html+='<div  class="cuadro_user" style="background-color:#' + element.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + element.nickname + '</b></div><br>';
     });
+
+    document.getElementById('totalusuarios').innerHTML = total_usuarios;
+    document.getElementById('usuarios').innerHTML = html;
 }
 
 
