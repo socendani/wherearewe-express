@@ -16,15 +16,22 @@ socket.on('disconnect', function () {
     }, 5000);
 
 });
+socket.on('logout', function (data) {
+    Materialize.toast("User lost.. reload", 2000);
+    setTimeout(function () {
+        salir("logout");
+    }, 3000);
+
+});
 
 
 
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
-//    console.log("messages-cli: " + usuario + " - " + mensaje);
+    //    console.log("messages-cli: " + usuario + " - " + mensaje);
 
-    if (mensaje.indexOf("entrando en el mapa")>=0) {
-         Materialize.toast(usuario+mensaje, 4000);
+    if (mensaje.indexOf("entrando en el mapa") >= 0) {
+        Materialize.toast(usuario + mensaje, 4000);
     }
     showIconSender();
     actualizarChat(usuario, mensaje);
@@ -67,14 +74,14 @@ socket.on('position-markers', function (markersObject) {
 /**********  Client Functions ********/
 
 function showIconSender() {
-//    return false;
+    //    return false;
     $("#iconsender").show();
     setTimeout(function () {
         $("#iconsender").hide();
     }, 1000);
 }
 function actualizarUsuarios(usuario, mensaje) {
-//    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);
+    //    console.log("actualizarChat2 => " + mensaje.nickname + "=" + mensaje.text);
     chat_user = "chat-user";
     if (nickname == usuario) {
         chat_user = "chat-user-me";
@@ -83,11 +90,11 @@ function actualizarUsuarios(usuario, mensaje) {
     html = '<div class="' + chat_user + '"><b>' + usuario + ':</b></div>';
     $('#usuarios').prepend(html);
 
-//    Materialize.toast(html, 4000);
+    //    Materialize.toast(html, 4000);
 }
 
 function actualizarChat(usuario, mensaje) {
-//    console.log("actualizarChat********** => " + usuario + "=" + mensaje);
+    //    console.log("actualizarChat********** => " + usuario + "=" + mensaje);
     chat_user = "chat-user";
     if (nickname == usuario) {
         chat_user = "chat-user-me";
@@ -99,16 +106,16 @@ function actualizarChat(usuario, mensaje) {
     html = '<div class="' + chat_user + '"><b>' + usuario + ': </b><em>' + mensaje + '</em></div>';
     $('#messages').prepend(html);
     pintar_mensajes();
-//    Materialize.toast(html, 4000);
+    //    Materialize.toast(html, 4000);
 }
 
 
 function addMessage() {
-//    var message = {
-//        room: document.getElementById('room').value,
-//        nickname: document.getElementById('nickname').value,
-//        text: document.getElementById('texto').value
-//    };
+    //    var message = {
+    //        room: document.getElementById('room').value,
+    //        nickname: document.getElementById('nickname').value,
+    //        text: document.getElementById('texto').value
+    //    };
     mensaje = document.getElementById('texto').value;
     socket.emit('message-new', mensaje);
     document.getElementById('texto').value = "";

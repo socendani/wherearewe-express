@@ -47,9 +47,11 @@ module.exports = {
 
     logout: function (res, req) {
         console.log("Usuario.. se vaaaaaa");
+        audit.log(req.session.nickname + " LOGOUT en " + req.session.room);
         users.findOneAndRemove({ "_id": req.session.id }, function (error, doc, result) {
             if (error) return audit.error(error);
-            audit.log(doc.nickname + " login out de  " + doc.room);
+            if (doc)
+                audit.log(doc.nickname + " login out de  " + doc.room);
             req.session.destroy();
             res.redirect("/");
         });

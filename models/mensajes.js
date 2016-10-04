@@ -16,9 +16,9 @@ var mensajesSchema = new Schema({
 
 mensajesSchema.methods.crear = function (mensaje, callback) {
     this.mensaje = mensaje;
-    this.nickname = sess.nickname;
-    this.color = sess.color;
-    this.room = sess.room;
+    this.nickname = sess.nickname || "anonimo";
+    this.color = sess.color || "unknown";
+    this.room = sess.room || "unknown";
     this.fecha = new Date().toISOString().slice(0, 19);
     this.save(function (err, obj) {
         if (err) return audit.error(err);
@@ -37,7 +37,7 @@ mensajesSchema.methods.showMensajes = function (howmany, cb) {
 mensajesSchema.methods.cleanMensajes = function (horas) {
     if (horas===undefined) horas=10;
     var start = new Date(new Date().getTime() - (horas * 60 * 60 * 1000));
-    MensajeModel.remove({
+    MensajeModel.find({
         "createdAt": {
             "$lte": start
         }

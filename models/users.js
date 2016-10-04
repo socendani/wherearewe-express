@@ -16,11 +16,11 @@ var usersSchema = new Schema({
 );
 
 
-usersSchema.pre('save', function (done) {
-    //No poden existir USUARIS que coincideixin en nickname+color+room
-    this.updated_at = new Date();
-    done();
-});
+// usersSchema.pre('save', function (done) {
+//     //No poden existir USUARIS que coincideixin en nickname+color+room
+//     this.updated_at = new Date();
+//     done();
+// });
 
 usersSchema.methods.getUsersFromRoom = function (room_name, cb) {
     UserModel.find({ room: room_name }, function (err, usuarios) {
@@ -42,12 +42,11 @@ usersSchema.methods.showUsers = function (howmany, cb) {
 usersSchema.methods.cleanUsers = function (horas) {
     if (horas === undefined) horas = 3;
     var start = new Date(new Date().getTime() - (horas * 60 * 60 * 1000));
-    // console.log(start);
     UserModel.find({
         "createdAt": {
             "$lte": start
         }
-    }).remove().exec();
+    }).remove().exec(function(err, docs){console.log(docs.length)});
 };
 
 
@@ -57,22 +56,5 @@ usersSchema.methods.cleanUsers = function (horas) {
 //Nuestros MODELO
 var UserModel = mongoose.model('users', usersSchema);
 module.exports = UserModel;
-//
-//var users = function () {
-////module.exports = {
-//    function updateUser(room, cb) {
-//        RoomModel.find({name: room.name}, function (err, docs) {
-//            if (docs.length) {
-//                cb('Name exists already', null);
-//            } else {
-//                room.save(function (err) {
-//                    cb(err, room);
-//                });
-//            }
-//        });
-//    }
-//};
-//
-//module.exports = mongoose.model('users', usersSchema);
 
 

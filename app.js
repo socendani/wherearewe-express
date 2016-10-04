@@ -24,7 +24,7 @@ var MongoStore = require('connect-mongo')(session);
 
 var fs = require("fs");
 /************  MODULES USES IN PROJECT  ************/
-var sess;  //DMR:  https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
+sess="";  //DMR:  https://codeforgeek.com/2014/09/manage-session-using-node-js-express-4/
 var users = require('./models/users.js');
 var audit = require('./models/audit.js');
 var mensajes = require('./models/mensajes.js');
@@ -91,7 +91,7 @@ app.use(session({
     proxy: true,
     resave: true,
     saveUninitialized: true,
-    maxAge: new Date(Date.now() + 1000 * 60 * 60),  // 1 hour
+    maxAge: new Date(Date.now() + 2000 * 60 * 60),  // 2 hour
     store: mongoStore
 }));
 
