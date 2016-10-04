@@ -9,7 +9,7 @@ socket.on('connect', function () {
 });
 socket.on('disconnect', function () {
     console.info('connection lost..');
-    html = "<h5>Se ha perdido la conexión</h5><p> .. reload en 5 segundos!</p>";
+    html = "<h5>Oh! Nos perdimos!</h5><br> .. nos encontramos en <br>5 segundos!";
     Materialize.toast(html, 4000);
     setTimeout(function () {
         location.reload();
@@ -28,9 +28,9 @@ socket.on('logout', function (data) {
 
 //Pintar mensajes recibidos
 socket.on('messages', function (usuario, mensaje) {
-    //    console.log("messages-cli: " + usuario + " - " + mensaje);
+       console.log("messages-cli: " + usuario + " - " + mensaje);
 
-    if (mensaje.indexOf("entrando en el mapa") >= 0) {
+    if (mensaje.indexOf("entrando en mapa") >= 0) {
         Materialize.toast(usuario + mensaje, 4000);
     }
     showIconSender();

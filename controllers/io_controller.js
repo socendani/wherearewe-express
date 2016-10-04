@@ -30,12 +30,12 @@ io.on('connection', function (socket) {
     socketlog(socket, "server-side: disconnect");
     // mensaje = ".... disconect: " + socket.nickname + " de " + socket.room;
     // console.log("disconnect");
-    users.findOneAndRemove({ "_id": socket.sid }, function (error, doc) {
-      if (error) return audit.error(error);
-      audit.log(mensaje);
-      // req.session.destroy();
-      // res.redirect("/");
-    });
+    // users.findOneAndRemove({ "_id": socket.sid }, function (error, doc) {
+    //   if (error) return audit.error(error);
+    //   audit.log(mensaje);
+    //   // req.session.destroy();
+    //   // res.redirect("/");
+    // });
   });
 
   /****************  MENSAJES    *********************/
@@ -70,6 +70,10 @@ io.on('connection', function (socket) {
     var m = new mensajes().crear(mensaje, function (err, obj) {
       if (err) return audit.error(err);
       io.sockets.in(socket.room).emit('messages', socket.nickname, mensaje);
+
+      var u=new users().setLastMessage(socket.sid, mensaje);
+
+
     });
   });
 

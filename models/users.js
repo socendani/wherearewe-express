@@ -7,6 +7,7 @@ var usersSchema = new Schema({
     nickname: { type: String, required: true, lowercase: true, trim: true },
     color: { type: String, required: true, trim: true },
     room: { type: String, lowercase: true, trim: true },
+    lastmessage: { type: String, default: "" },
     lat: { type: String, default: 0 },
     lng: { type: String, default: 0 }
 }, {
@@ -28,7 +29,15 @@ usersSchema.methods.getUsersFromRoom = function (room_name, cb) {
         //provesamos el resultado
         // console.log(usuarios);
         cb(null, usuarios);
-    }).select("-_id roomid nickname color lat lng");
+    }).select("-_id roomid nickname color lat lng lastmessage");
+};
+
+usersSchema.methods.setLastMessage = function (id, message) {
+    UserModel.findOne({"_id": id}, function (err, doc) {
+        if (err) return cb(err);
+        doc.lastmessage=message;
+        doc.save();
+    });
 };
 
 usersSchema.methods.showUsers = function (howmany, cb) {
@@ -36,7 +45,6 @@ usersSchema.methods.showUsers = function (howmany, cb) {
         if (err) return cb(err);
         cb(null, obj);
     }).sort([['updatedAt', 'descending']]).limit(howmany);
-
 };
 
 usersSchema.methods.cleanUsers = function (horas) {

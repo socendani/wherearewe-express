@@ -11,7 +11,7 @@ function initMap(lat, lng) {
         mapTypeId: google.maps.MapTypeId.roadmap
     };
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    addMarker(nickname, lat, lng, color, map);
+    addMarker(nickname, lat, lng, color, "entrando...", map);
 }
 
 
@@ -34,14 +34,15 @@ function emitimosPosicion(lat, lng) {
 
 
 // Adds a marker to the map.
-function addMarker(nickname, lat, lng, color, map) {
+function addMarker(nickname, lat, lng, color, lastmessage, map) {
     if (!lat)
         return false;
     //    console.log("(addMarker): " + nickname + ". lang: " + lat + ", lng: " + lng);
     is_me = (document.getElementById("nickname").value == nickname) ? true : false;
-    //    var infowindow = new google.maps.InfoWindow({
-    //        content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
-    //    });
+    var infowindow = new google.maps.InfoWindow({
+        content: "<b>" + nickname + "</b><br>" + (lastmessage || '') + "<br><a href='https://www.google.es/maps/place/" + lat + "," + lng + "' target='_blank'>Mi posición en Google maps</a>"
+        //    content: "<b></b>" + nickname + "<br><b>Lat: </b>" + lat + "<br><b>Long: </b>" + lng + "<br>"
+    });
     //    console.log(is_me);
     var marker = new google.maps.Marker({
         position: { lat: lat, lng: lng },
@@ -51,9 +52,9 @@ function addMarker(nickname, lat, lng, color, map) {
         icon: pinSymbol("#" + color, is_me),
         map: map
     });
-    //    marker.addListener('click', function () {
-    //        infowindow.open(map, marker);
-    //    });
+    marker.addListener('click', function () {
+        infowindow.open(map, marker);
+    });
     //Personalizate atributes
     marker.nickname = nickname;
     marker.id = nickname;
@@ -89,24 +90,53 @@ function encuadrarMapa() {
 }
 
 function actualizarMapa(markersObject) {
+    // console.log(markersObject);
     //Borrem Makers
+    var lat1 = document.getElementById("lat").value;
+    var lon1 = document.getElementById("lng").value;
     for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
     }
     markers = [];
     //Els tornem a afegir
-    total_usuarios=0;html="";
+    total_usuarios = 0; html = "";
     markersObject.forEach(function (element, index) {  //syncrónico
-        addMarker(element.nickname, parseFloat(element.lat), parseFloat(element.lng), element.color, map);
+        var lat2 = parseFloat(element.lat);
+        var lon2 = parseFloat(element.lng);
+
+        addMarker(element.nickname, lat2, lon2, element.color, element.lastmessage, map);
 
         //Actualizamos el contador de usuarios y el listado
         total_usuarios++;
         label = element.nickname.charAt(0).toUpperCase();
-        html+='<div  class="cuadro_user" style="background-color:#' + element.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + element.nickname + '</b></div><br>';
+        var distancia = "";
+        if (element.nickname!=document.getElementById("nickname").value) {
+            distancia = "(a " + calcularDistancia(lat1, lat2, lon1, lon2) + " km.)";
+        }
+        html += '<div  class="cuadro_user" style="background-color:#' + element.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + element.nickname + '</b> ' + distancia + '</div><br>';
     });
 
     document.getElementById('totalusuarios').innerHTML = total_usuarios;
     document.getElementById('usuarios').innerHTML = html;
+}
+
+/**
+ * Función para calcular la distancia entre dos puntos.
+ *
+ * @param lat1 = Latitud del punto de origen
+ * @param lat2 = Latitud del punto de destino
+ * @param lon1 = Longitud del punto de origen
+ * @param lon2 = Longitud del punto de destino
+ */
+function calcularDistancia(lat1, lat2, lon1, lon2) {
+    rad = function (x) { return x * Math.PI / 180; }
+    var R = 6378.137; //Radio de la tierra en km
+    var dLat = rad(lat2 - lat1);
+    var dLong = rad(lon2 - lon1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d.toFixed(3); //Retorna tres decimales
 }
 
 
