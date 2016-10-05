@@ -9,11 +9,11 @@ socket.on('connect', function () {
 });
 socket.on('disconnect', function () {
     console.info('connection lost..');
-    html = "<h5>Oh! Nos perdimos!</h5><br> .. nos encontramos en <br>5 segundos!";
-    Materialize.toast(html, 4000);
+    Materialize.toast("<h5>Oh! Nos perdimos!</h5>", 4000, "red");
+    Materialize.toast("Nos encontramos en 5 segundos!", 4000, "blue");
     setTimeout(function () {
         location.reload();
-    }, 5000);
+    }, 6000);
 
 });
 socket.on('logout', function (data) {

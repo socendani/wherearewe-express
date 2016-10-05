@@ -110,8 +110,10 @@ function actualizarMapa(markersObject) {
         total_usuarios++;
         label = element.nickname.charAt(0).toUpperCase();
         var distancia = "";
-        if (element.nickname!=document.getElementById("nickname").value) {
-            distancia = "(a " + calcularDistancia(lat1, lat2, lon1, lon2) + " km.)";
+        if (element.nickname != document.getElementById("nickname").value) {
+            var dist = calcularDistancia(lat1, lat2, lon1, lon2);
+            distancia = "(a " + dist + " km.)";
+            if (dist > 1000) distancia = "";
         }
         html += '<div  class="cuadro_user" style="background-color:#' + element.color + '">&nbsp;&nbsp;' + label + '&nbsp;</div><div style="display:inline" >&nbsp;<b>' + element.nickname + '</b> ' + distancia + '</div><br>';
     });

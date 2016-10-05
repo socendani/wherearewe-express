@@ -35,13 +35,13 @@ function geo_success(position) {
 }
 
 function pintar_mensajes() {
-    if (total_mensajes <= 0) {
-        $('#icontotalmensajes').hide();
-        document.getElementById('totalmensajes').innerHTML = "";
-    } else {
-        $('#icontotalmensajes').show();
-        document.getElementById('totalmensajes').innerHTML = total_mensajes;
-    }
+    // if (total_mensajes <= 0) {
+    //     $('#icontotalmensajes').hide();
+    //     document.getElementById('totalmensajes').innerHTML = "";
+    // } else {
+    //     $('#icontotalmensajes').show();
+    //     document.getElementById('totalmensajes').innerHTML = total_mensajes;
+    // }
 }
 
 
