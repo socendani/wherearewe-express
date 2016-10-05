@@ -44,8 +44,8 @@ router.get('/room/:room/:nickname?/:color?', isAuthenticated, function (req, res
     // if (req.params.room !== undefined) {
     //     req.session.room = require('querystring').escape(req.params.room.toLowerCase());
     // }
-    // controller.init(res, req);
-    res.redirect(url_show(req));
+    controller.init(res, req);
+    // res.redirect(url_show(req));
 });
 
 router.get('/tafanera/', function (req, res, next) {
@@ -111,7 +111,7 @@ router.get('/tafanera/', function (req, res, next) {
 ///////////////////************  PRIVATE *************************/ç
 function url_show(req) {
     //    return "/room/" + req.session.room + "/" + req.session.nickname + "/" + req.session.color;
-    return "/room/" + req.session.room;
+    return "/room/" + req.session.room + "/" + req.session.nickname;
 }
 
 //MiddleWare de autenticación
