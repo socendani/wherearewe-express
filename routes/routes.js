@@ -38,7 +38,8 @@ router.get('/room/:room', isAuthenticated, function (req, res, next) {
     // if (req.params.room !== undefined) {
     //     req.session.room = require('querystring').escape(req.params.room.toLowerCase());
     // }
-    controller.init(res, req);
+    // controller.init(res, req);
+    res.redirect(url_show(req));
 });
 router.get('/room/:room/:nickname?/:color?', isAuthenticated, function (req, res, next) {
     // if (req.params.room !== undefined) {
